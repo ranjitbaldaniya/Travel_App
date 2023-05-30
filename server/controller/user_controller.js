@@ -23,7 +23,7 @@ const register = async (req, res) => {
         password: hash,
         mobileNo: value.mobileNo,
         gender: value.gender,
-        role: "admin",
+        role: "user",
         dob: value.dob,
         status: value.status,
         createdBy: null,
@@ -39,7 +39,7 @@ const register = async (req, res) => {
       res.status(422).json({ error: message });
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).json(error.errors);
   }
 };
@@ -49,7 +49,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).send("Request missing username or password");
+    return res.status(400).json({ error: "Request missing email or password" });
   }
   const user = await User.findOne({ where: { email } });
   if (user) {

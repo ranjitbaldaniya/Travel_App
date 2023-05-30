@@ -8,6 +8,7 @@ const Tour = db.Tour;
 
 const addTour = async (req, res) => {
   const data = req.body;
+  console.log("data" , data)
   const result = TourSchemaValidation(data);
   const { value, error } = result;
   console.log("value", value);
@@ -56,8 +57,10 @@ const updateTour = async (req, res) => {
 //Get one tour
 const getTour = async (req, res) => {
   let id = req.params.id;
+  // console.log("id" , id)
   try {
     const data = await Tour.findOne({ where: { id: id } });
+    // console.log("getTour" , data)
     res.status(200).send(data);
   } catch (error) {
     console.log(error);
