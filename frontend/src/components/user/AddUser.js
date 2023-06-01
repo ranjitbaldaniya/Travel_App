@@ -16,10 +16,11 @@ import {
   CardBody,
 } from "reactstrap";
 import { TostSucess } from "../commonFunctions/Tost.js";
+import ApiHeader from "../commonFunctions/ApiHeader.js";
 
-const AddTour = () => {
-  const [tourData, setTourData] = useState({});
-  // console.log("tourdata", tourData);
+const AddUser = () => {
+  const [userData, setUserData] = useState({});
+  console.log("userData", userData);
   const [errorName, setErrorName] = useState("");
   const [error, setError] = useState(null);
   // console.log("errorName", errorName);
@@ -29,26 +30,27 @@ const AddTour = () => {
   //handlechange for handling events
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setTourData({ ...tourData, [name]: value });
+    setUserData({ ...userData, [name]: value });
   };
 
   //handlesubmit for submiting form data
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(tourData);
-    handleAddTour(tourData);
+    console.log("check user data ", userData);
+    handleAddUser(userData);
   };
 
-  //handleAddTour function
-  const handleAddTour = async (tourData) => {
-    let url = "http://localhost:3001/tour/addtour";
+  //handleAddUser function
+  const handleAddUser = async (userData) => {
+    let url = "http://localhost:3001/admin/user/adduser";
+    let header = ApiHeader;
     try {
-      const response = await axios.post(url, tourData);
+      const response = await axios.post(url, userData, header);
       console.log("res", response);
-      setTourData({});
+      setUserData({});
 
-      TostSucess("Tour Added Successfully!!");
-      navigate("/admin");
+      TostSucess("User Added Successfully!!");
+      navigate("/admin/users");
     } catch (error) {
       console.log("error in catch", error);
       setErrorName(error.response.data.error.split(" ")[0]);
@@ -69,7 +71,7 @@ const AddTour = () => {
       <Container style={{ backgroundColor: "#eee", height: "100%" }}>
         <Row>
           <div className="text-center text-dark mb-4 mt-5">
-            <h5>Add Tour</h5>
+            <h5>Add User</h5>
           </div>
 
           <Col lg={2} md={1}></Col>
@@ -79,56 +81,58 @@ const AddTour = () => {
               <CardBody>
                 <Form role="form" onSubmit={handleSubmit}>
                   <FormGroup>
-                    <Label>Tour Name</Label>
+                    <Label>Firstname</Label>
                     <InputGroup className="input-group-alternative mb-3">
                       <Input
-                        name="Name"
-                        placeholder="Enter tour name"
+                        name="firstName"
+                        placeholder="Enter your firstname"
                         type="text"
                         onChange={handleChange}
                         // required
                       />
                     </InputGroup>
                     {/* {console.log("error" , errorName == '"firstName"')} */}
-                    {errorName == '"Name"' ? (
+                    {errorName == '"firstName"' ? (
                       <span>{errorDiv}</span>
                     ) : (
                       <span></span>
                     )}
                   </FormGroup>
+
                   <FormGroup>
-                    <Label>Discription</Label>
+                    <Label>Lastname</Label>
+
                     <InputGroup className="input-group-alternative mb-3">
                       <Input
-                        name="Discription"
-                        placeholder="Enter tour discription"
+                        name="lastName"
+                        placeholder="Enter your lastname"
                         type="text"
                         onChange={handleChange}
                         // required
                       />
                     </InputGroup>
-                    {/* {console.log("error" , errorName == '"firstName"')} */}
-                    {errorName == '"Discription"' ? (
+                    {errorName == '"lastName"' ? (
                       <span>{errorDiv}</span>
                     ) : (
                       <span></span>
                     )}
                   </FormGroup>
+
                   <Row>
                     <Col lg={6} md={12}>
                       <FormGroup>
-                        <Label>Price</Label>
+                        <Label>Email</Label>
+
                         <InputGroup className="input-group-alternative mb-3">
                           <Input
-                            name="Price"
-                            placeholder="Enter tour price"
-                            type="text"
+                            name="email"
+                            placeholder="Enter your email"
+                            type="email"
                             onChange={handleChange}
                             // required
                           />
                         </InputGroup>
-                        {/* {console.log("error" , errorName == '"firstName"')} */}
-                        {errorName == '"Price"' ? (
+                        {errorName == '"email"' ? (
                           <span>{errorDiv}</span>
                         ) : (
                           <span></span>
@@ -137,18 +141,18 @@ const AddTour = () => {
                     </Col>
                     <Col lg={6} md={12}>
                       <FormGroup>
-                        <Label>PackageDays</Label>
-                        <InputGroup className="input-group-alternative mb-3">
+                        <Label>Mobile number</Label>
+
+                        <InputGroup className="input-group-alternative">
                           <Input
-                            name="PackageDays"
-                            placeholder="Enter tour days"
-                            type="text"
+                            name="mobileNo"
+                            placeholder="Enter your number"
+                            type="number"
                             onChange={handleChange}
                             // required
                           />
                         </InputGroup>
-                        {/* {console.log("error" , errorName == '"firstName"')} */}
-                        {errorName == '"PackageDays"' ? (
+                        {errorName == '"mobileNo"' ? (
                           <span>{errorDiv}</span>
                         ) : (
                           <span></span>
@@ -160,18 +164,18 @@ const AddTour = () => {
                   <Row>
                     <Col lg={6} md={12}>
                       <FormGroup>
-                        <Label>StartDate</Label>
+                        <Label>Password</Label>
+
                         <InputGroup className="input-group-alternative">
                           <Input
-                            name="StartDate"
-                            placeholder="date placeholder"
-                            type="date"
+                            name="password"
+                            placeholder="Enter your password"
+                            type="password"
                             onChange={handleChange}
                             // required
                           />
                         </InputGroup>
-                        {/* {console.log("error" , errorName == '"firstName"')} */}
-                        {errorName == '"StartDate"' ? (
+                        {errorName == '"password"' ? (
                           <span>{errorDiv}</span>
                         ) : (
                           <span></span>
@@ -180,18 +184,20 @@ const AddTour = () => {
                     </Col>
                     <Col lg={6} md={12}>
                       <FormGroup>
-                        <Label>EndDate</Label>
+                        <Label>Select role</Label>
+
                         <InputGroup className="input-group-alternative">
                           <Input
-                            name="EndDate"
-                            placeholder="date placeholder"
-                            type="date"
+                            type={"select"}
+                            name="role"
                             onChange={handleChange}
-                            // required
-                          />
+                          >
+                            <option value={"admin"}>Admin</option>
+                            <option value={"user"}> User</option>
+                          </Input>
                         </InputGroup>
-                        {/* {console.log("error" , errorName == '"firstName"')} */}
-                        {errorName == '"EndDate"' ? (
+
+                        {errorName == '"role' ? (
                           <span>{errorDiv}</span>
                         ) : (
                           <span></span>
@@ -199,17 +205,77 @@ const AddTour = () => {
                       </FormGroup>
                     </Col>
                   </Row>
-                  <FormGroup>
-                    <Label for="exampleFile">Image</Label>
-                    <Input
-                      type="file"
-                      id="exampleCustomFileBrowser"
-                      name="Image"
-                      label={"Choose an image file"}
-                      onChange={handleChange}
-                    />
-                  </FormGroup>
-                  <div className="text-center">
+                  <Row>
+                    <Col md={6}>
+                      <Row>
+                        <Label>Select gender</Label>
+                        <Col md={6}>
+                          <FormGroup>
+                            {/* <InputGroup className=""> */}
+                            <Label check className="">
+                              Male
+                            </Label>
+                            <Input
+                              name="gender"
+                              value="male"
+                              type="radio"
+                              onChange={handleChange}
+                              // required
+                            />
+                            {/* </InputGroup> */}
+                            {errorName == '"gender"' ? (
+                              <span>{errorDiv}</span>
+                            ) : (
+                              <span></span>
+                            )}
+                          </FormGroup>
+                        </Col>
+                        <Col md={6}>
+                          <FormGroup>
+                            {/* <InputGroup className=""> */}
+                            <Label check>Female</Label>
+                            <Input
+                              name="gender"
+                              type="radio"
+                              value="female"
+                              onChange={handleChange}
+                              // required
+                            />
+                            {/* </InputGroup> */}
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col md={6}>
+                      <FormGroup>
+                        <Label>BirthDate</Label>
+                        <InputGroup className="input-group-alternative">
+                          <Input
+                            name="dob"
+                            placeholder="date placeholder"
+                            type="date"
+                            onChange={handleChange}
+                            // required
+                          />
+                        </InputGroup>
+                        {errorName == '"dob"' ? (
+                          <span>{errorDiv}</span>
+                        ) : (
+                          <span></span>
+                        )}
+                      </FormGroup>
+                    </Col>
+                  </Row>
+
+                  <div className="text-center mt-4">
+                    <Button
+                      color="warning"
+                      type="button"
+                      className="me-5"
+                      onClick={() => navigate("/admin/users")}
+                    >
+                      Cancel
+                    </Button>
                     <Button color="primary" type="submit">
                       Submit
                     </Button>
@@ -225,4 +291,4 @@ const AddTour = () => {
   );
 };
 
-export default AddTour;
+export default AddUser;

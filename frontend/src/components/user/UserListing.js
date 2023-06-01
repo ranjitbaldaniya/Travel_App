@@ -1,6 +1,5 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Col,
   Container,
@@ -13,51 +12,44 @@ import {
   ModalBody,
 } from "reactstrap";
 import moment from "moment";
+import { TostSucess } from "../../components/commonFunctions/Tost.js";
+import axios from "axios";
+import ApiHeader from "../commonFunctions/ApiHeader";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
-import { TostSucess } from "../../components/commonFunctions/Tost.js";
 
-const AdminDashboard = () => {
-  const [tourData, setTourData] = useState([]);
-  const navigate = useNavigate();
-
+const UserListing = () => {
+  const [listUsers, setListUsers] = useState([]);
   // Modal open state
   const [modal, setModal] = useState(false);
   const [delId, setDelId] = useState("");
 
-  // Toggle for Modal
-  const toggle = () => setModal(!modal);
+  const navigate = useNavigate();
 
-  //notification toast
-  // const notify = (message) => {
-  //   toast.success(message, {
-  //     position: toast.POSITION.TOP_RIGHT,
-  //     autoClose: 2000,
-  //   });
-  // };
+  const toggle = () => setModal(!modal);
 
   //useEffect for fetching Tour data
   useEffect(() => {
-    handleGetTour();
+    handleListUser();
   }, []);
 
-  //handleGetTour function
-  const handleGetTour = async () => {
-    let url = "http://localhost:3001/tour/viewalltour";
+  //handleListUser function
+  const handleListUser = async () => {
+    let url = "http://localhost:3001/admin/user/list";
+    let header = ApiHeader;
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url, header);
       console.log("res", response.data);
-      setTourData(response.data);
+      setListUsers(response.data);
     } catch (error) {
       console.log("error in catch", error);
     }
   };
 
-  // handleEdit
+  //handleEdit user
   const handleEdit = (id) => {
     console.log("id", id);
-    navigate(`/admin/edittour/${id}`);
+    navigate(`/admin/edituser/${id}`);
   };
 
   //handleDelete
@@ -76,70 +68,58 @@ const AdminDashboard = () => {
       const response = await axios.get(url);
       console.log("delete res", response);
       toggle();
-      handleGetTour();
+      handleListUser();
       TostSucess("Tour is deleted successfully!");
     } catch (error) {
       console.log("error in catch", error);
     }
   };
-
-  // const StartDate = moment(tourData.StartDate).utc().format('DD-MM-YYYY')
-  // console.log(StartDate)
   return (
     <>
       <Container>
         <Row>
           <Col md={12} lg={12}>
             <div className="d-flex justify-content-between mb-3 mt-3">
-              <h3 className=" text-primary">All Available Tours</h3>
+              <h3 className=" text-primary">All Available User</h3>
               <Button
                 color="primary"
                 className="btn me-5"
-                onClick={() => navigate("/admin/addtour")}
+                onClick={() => navigate("/admin/adduser")}
               >
-                AddTour
+                Add User
               </Button>
             </div>
           </Col>
         </Row>
+
         <Row>
           <Col md={12} lg={12}>
             <Table striped>
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Name</th>
-                  <th>Discription</th>
-                  <th>Pack-Days</th>
-                  <th>Price</th>
-                  <th>Image</th>
-                  <th>Start Date</th>
-                  <th>End Date</th>
+                  <th>Firstname</th>
+                  <th>LastName</th>
+                  <th>Email</th>
+                  {/* <th>Password</th> */}
+                  <th>Mobile No</th>
+                  <th>Gender</th>
+                  <th>Date of Birth</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {tourData.map((data, i) => (
+                {listUsers.map((data, i) => (
                   <>
                     <tr key={i}>
                       <th scope="row">{data.id}</th>
-                      <td>{data.Name}</td>
-                      <td style={{ width: "300px" }}>{data.Discription}</td>
-                      <td>{data.PackageDays}</td>
-                      <td>{data.Price}</td>
-                      <td>
-                        <img
-                          src={data.Image}
-                          className=""
-                          height={100}
-                          width={150}
-                          alt="tour image"
-                        />
-                      </td>
-                      <td>
-                        {moment(data.StartDate).utc().format("DD-MM-YYYY")}
-                      </td>
-                      <td>{moment(data.EndDate).utc().format("DD-MM-YYYY")}</td>
+                      <td>{data.firstName}</td>
+                      <td>{data.lastName}</td>
+                      <td>{data.email}</td>
+                      {/* <td >{data.password}</td> */}
+                      <td>{data.mobileNo}</td>
+                      <td>{data.gender}</td>
+                      <td> {moment(data.dob).utc().format("DD-MM-YYYY")}</td>
                       <td>
                         <div className="d-flex justify-content-around">
                           <FiEdit
@@ -152,7 +132,6 @@ const AdminDashboard = () => {
                             className="text-danger"
                             style={{ cursor: "pointer" }}
                             onClick={() => handleDelete(data.id)}
-                            // onClick={}
                           />
                         </div>
                       </td>
@@ -163,9 +142,9 @@ const AdminDashboard = () => {
             </Table>
             <Modal isOpen={modal} toggle={toggle}>
               <ModalHeader toggle={toggle} className="text-danger">
-                Delete Tour
+                Delete User
               </ModalHeader>
-              <ModalBody>Click delete to remove tour</ModalBody>
+              <ModalBody>Click delete to remove User</ModalBody>
               <ModalFooter>
                 <Button color="secondary" onClick={toggle}>
                   Cancle
@@ -182,4 +161,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default UserListing;

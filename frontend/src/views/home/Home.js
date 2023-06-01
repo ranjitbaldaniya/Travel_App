@@ -1,17 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  CardSubtitle,
-  CardTitle,
-  Col,
-  Container,
-  Row,
-  CardBody,
-  CardImg,
-} from "reactstrap";
+import { Card, CardTitle, Col, Container, Row, CardBody } from "reactstrap";
 import axios from "axios";
-import AuthNavbar from "../../components/navbar/AuthNavbar";
-import { Outlet } from "react-router-dom";
 
 const Home = () => {
   const [tourData, setTourData] = useState([]);
@@ -61,7 +50,7 @@ const Home = () => {
             <Col lg="6" xl="3" className="mb-4">
               <Card className="mb-4 mb-xl-0">
                 <CardBody>
-                  <img src={data.Image} height={150} width={200} />
+                  <img src={data.Image} height={150} width={200} alt="tour image" />
                   <Row>
                     <div className="col">
                       <CardTitle tag="h5" className=" text-muted mb-0">

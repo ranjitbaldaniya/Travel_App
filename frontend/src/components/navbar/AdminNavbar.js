@@ -29,7 +29,7 @@ const AdminNavbar = () => {
     const data = handleGetAdminDetails();
     setUserData(data);
     setUserName(data.firstName);
-  }, []);
+  }, [sessionStorage.getItem("user")]);
 
   return (
     <div className="topbar bg-primary">

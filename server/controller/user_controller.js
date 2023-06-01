@@ -1,7 +1,12 @@
 var db = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { UserValidation } = require("../middleware/UserValidation.js");
+const {
+  UserValidation,
+  UpdateUserValidation,
+  AddUserValidation,
+  UpdateProfileValidation,
+} = require("../middleware/UserValidation.js");
 const { createToken } = require("../middleware/Auth.js");
 const User = db.user;
 
@@ -70,7 +75,7 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
   let id = req.params.id;
   const data = req.body;
-  const result = UserValidation(data);
+  const result = UpdateUserValidation(data);
   const { value, error } = result;
   console.log("value", value);
   const valid = error == null;
@@ -140,10 +145,11 @@ const viewProfile = async (req, res) => {
 //Update User Profile
 const updateProfile = async (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
+  // console.log("token"  , token)
   const validToken = jwt.verify(token, "12bob12ou2b1ob");
   const userId = validToken.userId;
   const data = req.body;
-  const result = UserValidation(data);
+  const result = UpdateProfileValidation(data);
   const { value, error } = result;
   // console.log("value", value);
   const valid = error == null;
@@ -167,30 +173,12 @@ const updateProfile = async (req, res) => {
 //Add  user api
 const addUser = async (req, res) => {
   const data = req.body;
-  // console.log(data);
-
-  const registerSchema = Joi.object().keys({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
-    email: Joi.string().required(),
-    password: Joi.string().required(),
-    mobileNo: Joi.string().required(),
-    gender: Joi.string().required(),
-    role: Joi.string().required(),
-    dob: Joi.string().required(),
-    status: Joi.boolean(),
-  });
-  const dataToValidate = data;
-  const result = registerSchema.validate(dataToValidate);
+  console.log(data);
+  const result = AddUserValidation(data);
   const { value, error } = result;
   const valid = error == null;
   try {
-    if (!valid) {
-      res.status(422).json({
-        message: "Incomplete Form Data!",
-        data: data,
-      });
-    } else {
+    if (valid) {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       let userObject = {
@@ -207,8 +195,13 @@ const addUser = async (req, res) => {
         updateBy: null,
       };
 
-      const createdPost = await await User.create(userObject);
-      res.status(200).json({ message: "User created", createdPost });
+      const userCreated = await await User.create(userObject);
+      res.status(200).json({ message: "User created", userCreated });
+    } else {
+      const { details } = error;
+
+      const message = details.map((i) => i.message).join(",");
+      res.status(400).json({ error: message });
     }
   } catch (error) {
     // console.log(error)

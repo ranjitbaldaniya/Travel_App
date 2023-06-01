@@ -24,18 +24,15 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
   Input,
-  InputGroupText,
   InputGroup,
   Row,
   Col,
   Container,
 } from "reactstrap";
-import AuthNavbar from "../../components/navbar/AuthNavbar";
 
 const Login = () => {
   const [userData, setUserData] = useState({});

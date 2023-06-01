@@ -33,7 +33,7 @@ const updateTour = async (req, res) => {
   const data = req.body;
   let id = req.params.id;
 
-  const result = TourSchemaValidation.validate(data);
+  const result = TourSchemaValidation(data);
   const { value, error } = result;
   console.log("value", value);
   const valid = error == null;

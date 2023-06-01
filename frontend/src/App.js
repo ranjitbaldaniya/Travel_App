@@ -13,6 +13,10 @@ import Profile from "./components/profile/Profile";
 import UserLayout from "./layouts/UserLayout";
 import EditTour from "./components/tour/EditTour";
 import AddTour from "./components/tour/AddTour";
+import EditProfile from "./components/profile/EditProfile";
+import UserListing from "./components/user/UserListing";
+import AddUser from "./components/user/AddUser";
+import EditUser from "./components/user/EditUser";
 
 function App() {
   return (
@@ -26,9 +30,14 @@ function App() {
         <Route path="/admin" element={<Admin />}>
           <Route index element={<AdminDashboard />} />
           {/* <Route path="/admin/tourlist" element={<AdminDashboard />} /> */}
-          <Route path="/admin/addtour" element={<AddTour/>} />
-          <Route path="/admin/edittour/:id" element={<EditTour/>} />
+          <Route path="/admin/addtour" element={<AddTour />} />
+          <Route path="/admin/edittour/:id" element={<EditTour />} />
           <Route path="/admin/profile" element={<Profile />} />
+          <Route path="/admin/editprofile" element={<EditProfile />} />
+          <Route path="/admin/users" element={<UserListing />} />
+          <Route path="/admin/adduser" element={<AddUser />} />
+          <Route path="/admin/edituser/:id" element={<EditUser/>} />
+
         </Route>
         <Route path="/user" element={<UserLayout />}>
           <Route index element={<UserDashboard />} />

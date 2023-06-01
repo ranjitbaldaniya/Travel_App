@@ -23,9 +23,12 @@ const SidebarAdmin = () => {
                   Profile
                 </li>
               </Link>
-              <li className="sidebarListItem">
-                {/* <TrendingUp className="sidebarIcon" /> */}
-              </li>
+              <Link to="/admin/users" className="text-dark">
+                <li className="sidebarListItem">
+                  {/* <Timeline className="sidebarIcon" /> */}
+                  Users
+                </li>
+              </Link>
             </ul>
           </div>
         </div>

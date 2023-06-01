@@ -10,8 +10,8 @@ const TourSchemaValidation = (data) => {
     StartDate: Joi.date().raw().required(),
     EndDate: Joi.date().raw().required(),
     status: Joi.boolean(),
-    createBy: Joi.number(),
-    updateBy: Joi.number(),
+    // createBy: Joi.number(),
+    // updateBy: Joi.number(),
   });
 
   const result = addTourSchema.validate(data);

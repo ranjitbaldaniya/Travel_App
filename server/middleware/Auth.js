@@ -13,7 +13,7 @@ const createToken = (user) => {
 const validateToken = (req, res, next) => {
   // const access_token = req.cookies["access_token"];
   //   const access_token = (req.headers.authorization);
-    console.log("access- " , req.headers)
+    console.log("validate token header " , req.headers)
   const token = req.headers.authorization.split(" ")[1];
 
     // console.log("access-token " , token)
