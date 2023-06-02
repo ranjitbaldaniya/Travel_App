@@ -17,12 +17,23 @@ import axios from "axios";
 import ApiHeader from "../commonFunctions/ApiHeader";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
+import Pagination from "../../components/commonFunctions/Pagination.js";
 
 const UserListing = () => {
   const [listUsers, setListUsers] = useState([]);
   // Modal open state
   const [modal, setModal] = useState(false);
   const [delId, setDelId] = useState("");
+  //Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [userPerPage] = useState(10);
+
+  //get current tour
+  const indexOfLastTour = currentPage * userPerPage;
+  const indexOfFirstTour = indexOfLastTour - userPerPage;
+  const currentTour = listUsers.slice(indexOfFirstTour, indexOfLastTour);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const navigate = useNavigate();
 
@@ -57,6 +68,7 @@ const UserListing = () => {
     console.log("deleteID", id);
     setDelId(id);
     toggle();
+    handleListUser();
   };
 
   //on delete function
@@ -109,7 +121,7 @@ const UserListing = () => {
                 </tr>
               </thead>
               <tbody>
-                {listUsers.map((data, i) => (
+                {currentTour.map((data, i) => (
                   <>
                     <tr key={i}>
                       <th scope="row">{data.id}</th>
@@ -154,6 +166,15 @@ const UserListing = () => {
                 </Button>
               </ModalFooter>
             </Modal>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12} className="d-flex justify-content-center">
+            <Pagination
+              postPerPage={userPerPage}
+              totalPost={listUsers.length}
+              paginate={paginate}
+            />
           </Col>
         </Row>
       </Container>

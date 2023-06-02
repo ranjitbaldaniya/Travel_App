@@ -4,9 +4,9 @@ const {validateToken} = require("../middleware/Auth")
 
 
 
-tourRouter.post("/addtour" , tourController.addTour) 
+tourRouter.post("/addtour" ,tourController.upload ,  tourController.addTour) 
 
-tourRouter.post("/updateTour/:id" , tourController.updateTour) 
+tourRouter.post("/updateTour/:id" ,tourController.upload , tourController.updateTour) 
 
 tourRouter.get("/editTour/:id" , tourController.getTour) 
 

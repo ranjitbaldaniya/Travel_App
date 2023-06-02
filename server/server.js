@@ -23,6 +23,12 @@ app.use("/tour", tourRouter);
 const inquiryRouter = require("./routes/inquiryRoutes");
 app.use("/inquiry", inquiryRouter);
 
+//Static Images Folder
+app.use(
+  "/Images",
+  express.static("./Images")
+);
+
 //test api
 app.get("/", (req, res) => {
   res.send("All good!");

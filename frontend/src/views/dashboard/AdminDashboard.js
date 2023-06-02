@@ -17,25 +17,28 @@ import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { TostSucess } from "../../components/commonFunctions/Tost.js";
+import Pagination from "../../components/commonFunctions/Pagination.js";
 
 const AdminDashboard = () => {
   const [tourData, setTourData] = useState([]);
-  const navigate = useNavigate();
+  //Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [tourPerPage] = useState(5);
+
+  //get current tour
+  const indexOfLastTour = currentPage * tourPerPage;
+  const indexOfFirstTour = indexOfLastTour - tourPerPage;
+  const currentTour = tourData.slice(indexOfFirstTour, indexOfLastTour);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Modal open state
   const [modal, setModal] = useState(false);
   const [delId, setDelId] = useState("");
 
+  const navigate = useNavigate();
   // Toggle for Modal
   const toggle = () => setModal(!modal);
-
-  //notification toast
-  // const notify = (message) => {
-  //   toast.success(message, {
-  //     position: toast.POSITION.TOP_RIGHT,
-  //     autoClose: 2000,
-  //   });
-  // };
 
   //useEffect for fetching Tour data
   useEffect(() => {
@@ -119,7 +122,7 @@ const AdminDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {tourData.map((data, i) => (
+                {currentTour.map((data, i) => (
                   <>
                     <tr key={i}>
                       <th scope="row">{data.id}</th>
@@ -128,8 +131,10 @@ const AdminDashboard = () => {
                       <td>{data.PackageDays}</td>
                       <td>{data.Price}</td>
                       <td>
+                        {console.warn("data", data)}
+                        {/* src="../../publicC:\fakepath\Taj-Mahal.jpg" */}
                         <img
-                          src={data.Image}
+                          src={`http://localhost:3001/` + data.Image}
                           className=""
                           height={100}
                           width={150}
@@ -161,6 +166,7 @@ const AdminDashboard = () => {
                 ))}
               </tbody>
             </Table>
+
             <Modal isOpen={modal} toggle={toggle}>
               <ModalHeader toggle={toggle} className="text-danger">
                 Delete Tour
@@ -175,6 +181,15 @@ const AdminDashboard = () => {
                 </Button>
               </ModalFooter>
             </Modal>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12} className="d-flex justify-content-center">
+            <Pagination
+              postPerPage={tourPerPage}
+              totalPost={tourData.length}
+              paginate={paginate}
+            />
           </Col>
         </Row>
       </Container>

@@ -19,16 +19,18 @@ import moment from "moment";
 import { TostSucess } from "../commonFunctions/Tost.js";
 
 const EditTour = () => {
-  const [tour, setTour] = useState({});
-  // const [tourData, setTourData] = useState({});
+  const [name, setName] = useState("");
+  const [discription, setDiscription] = useState("");
+  const [price, setPrice] = useState("");
+  const [packageDays, setPackageDays] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [image, setImage] = useState("");
+
   const [errorName, setErrorName] = useState("");
   const [error, setError] = useState(null);
 
-  // console.log("errorName", errorName);
-
   const userId = useParams();
-
-  console.log("single tour Data", tour);
 
   const navigate = useNavigate();
 
@@ -37,8 +39,15 @@ const EditTour = () => {
     let url = `http://localhost:3001/tour/editTour/${userId.id}`;
     try {
       const response = await axios.get(url, userId);
-      console.log("res", response);
-      setTour(response.data);
+      console.log("res", response.data.Name);
+      setName(response.data.Name);
+      setDiscription(response.data.Discription);
+      setPrice(response.data.Price);
+      setPackageDays(response.data.PackageDays);
+      setStartDate(response.data.StartDate);
+      setEndDate(response.data.EndDate);
+      setImage(response.data.Image);
+      // setTour(response.data);
     } catch (error) {
       console.log("error in catch", error);
     }
@@ -49,41 +58,40 @@ const EditTour = () => {
     handleGetTour();
   }, []);
 
-  //handlechange for handling events
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setTour({ ...tour, [name]: value });
-  };
-
   //handlesubmit for submiting form data
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("123", tour);
 
-    const dataToUpdate = {
-      Name: tour.Name,
-      Discription: tour.Discription,
-      Image: tour.Image,
-      Price: tour.Price,
-      PackageDays: tour.PackageDays,
-      StartDate: tour.StartDate,
-      EndDate: tour.EndDate,
-      status: true,
-      // createBy: null,
-      // updateBy: null,
-    };
-    handleAddTour(dataToUpdate);
+    const formData = new FormData();
+    // console.log("name", name);
+    formData.append("Name", name);
+    formData.append("Discription", discription);
+    formData.append("Price", price);
+    formData.append("PackageDays", packageDays);
+    formData.append("StartDate", startDate);
+    formData.append("EndDate", endDate);
+    formData.append("Image", image);
+
+    // console.log(formData);
+
+    handleAddTour(formData);
   };
 
   //handleRegister function
   const handleAddTour = async (dataToUpdate) => {
     let url = `http://localhost:3001/tour/updateTour/${userId.id}`;
-    console.log("esited tour dataaa", dataToUpdate);
+    console.log("updated tour dataaa", dataToUpdate);
     try {
       const response = await axios.post(url, dataToUpdate);
       console.log("res of update", response);
-      setTour({});
-      TostSucess("Tour is edited successfully!");
+      setName("");
+      setDiscription("");
+      setPrice("");
+      setPackageDays("");
+      setStartDate("");
+      setEndDate("");
+      setImage("");
+      TostSucess("Tour is Updated Successfully!");
       navigate("/admin");
       // alert("Tour Updated Successfully!!");
     } catch (error) {
@@ -114,7 +122,12 @@ const EditTour = () => {
           <Col lg={8} md={10}>
             <Card>
               <CardBody>
-                <Form role="form" onSubmit={handleSubmit}>
+                <Form
+                  role="form"
+                  method="post"
+                  enctype="multipart/form-data"
+                  onSubmit={handleSubmit}
+                >
                   <FormGroup>
                     <Label>Tour Name</Label>
                     <InputGroup className="input-group-alternative mb-3">
@@ -122,9 +135,8 @@ const EditTour = () => {
                         name="Name"
                         placeholder="Enter tour name"
                         type="text"
-                        value={tour.Name}
-                        onChange={handleChange}
-                        // required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)} // required
                       />
                     </InputGroup>
                     {/* {console.log("error" , errorName == '"firstName"')} */}
@@ -141,8 +153,8 @@ const EditTour = () => {
                         name="Discription"
                         placeholder="Enter tour discription"
                         type="text"
-                        value={tour.Discription}
-                        onChange={handleChange}
+                        value={discription}
+                        onChange={(e) => setDiscription(e.target.value)}
                         // required
                       />
                     </InputGroup>
@@ -161,9 +173,9 @@ const EditTour = () => {
                           <Input
                             name="Price"
                             placeholder="Enter tour price"
-                            type="text"
-                            value={tour.Price}
-                            onChange={handleChange}
+                            type="number"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
                             // required
                           />
                         </InputGroup>
@@ -182,9 +194,9 @@ const EditTour = () => {
                           <Input
                             name="PackageDays"
                             placeholder="Enter tour days"
-                            type="text"
-                            value={tour.PackageDays}
-                            onChange={handleChange}
+                            type="number"
+                            value={packageDays}
+                            onChange={(e) => setPackageDays(e.target.value)}
                             // required
                           />
                         </InputGroup>
@@ -207,10 +219,9 @@ const EditTour = () => {
                             name="StartDate"
                             placeholder="date placeholder"
                             type="date"
-                            value={moment(tour.StartDate)
-                              .utc()
-                              .format("YYYY-MM-DD")}
-                            onChange={handleChange}
+                            value={moment(startDate).utc().format("YYYY-MM-DD")}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            max={endDate}
                             // required
                           />
                         </InputGroup>
@@ -230,10 +241,12 @@ const EditTour = () => {
                             name="EndDate"
                             placeholder="date placeholder"
                             type="date"
-                            value={moment(tour.EndDate)
-                              .utc()
-                              .format("YYYY-MM-DD")}
-                            onChange={handleChange}
+                            value={moment(endDate).utc().format("YYYY-MM-DD")}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            min={startDate}
+                            invalid={
+                              startDate && endDate && startDate >= endDate
+                            }
                             // required
                           />
                         </InputGroup>
@@ -245,6 +258,13 @@ const EditTour = () => {
                         )}
                       </FormGroup>
                     </Col>
+                    {startDate && endDate && startDate >= endDate ? (
+                      <div className="text-center">
+                        <i class="text-danger">
+                          * Startdate must be less then Enddate
+                        </i>
+                      </div>
+                    ) : null}
                   </Row>
                   <FormGroup>
                     <Label for="exampleFile">Image</Label>
@@ -252,19 +272,25 @@ const EditTour = () => {
                       type="file"
                       id="exampleCustomFileBrowser"
                       name="Image"
-                      // value={tour.Image}
+                      // value={`http://localhost:3001/`+image}
+                      accept=".png, .jpg, .jpeg"
                       label={"Choose an image file"}
-                      onChange={handleChange}
+                      onChange={(e) => setImage(e.target.files[0])}
                     />
+                    {errorName == '"Image"' ? (
+                      <span>{errorDiv}</span>
+                    ) : (
+                      <span></span>
+                    )}
                   </FormGroup>
                   <div className="text-center">
-                  <Button
-                    color="warning"
-                    className="me-5"
-                    onClick={() => navigate("/admin")}
-                  >
-                    Cancel
-                  </Button>
+                    <Button
+                      color="warning"
+                      className="me-5"
+                      onClick={() => navigate("/admin")}
+                    >
+                      Cancel
+                    </Button>
                     <Button color="primary" type="submit">
                       Submit
                     </Button>

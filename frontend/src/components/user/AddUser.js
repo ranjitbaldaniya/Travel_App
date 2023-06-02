@@ -148,6 +148,7 @@ const AddUser = () => {
                             name="mobileNo"
                             placeholder="Enter your number"
                             type="number"
+                            maxLength={"10"}
                             onChange={handleChange}
                             // required
                           />
@@ -254,6 +255,7 @@ const AddUser = () => {
                             name="dob"
                             placeholder="date placeholder"
                             type="date"
+                            min='1990-01-01' max='2023-01-01'
                             onChange={handleChange}
                             // required
                           />

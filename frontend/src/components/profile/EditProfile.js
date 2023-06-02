@@ -156,7 +156,7 @@ const EditProfile = () => {
                       type="date"
                       value={moment(userData.dob).utc().format("YYYY-MM-DD")}
                       onChange={handleChange}
-
+                      min='1990-01-01' max='2023-01-01'
                       // onChange={handleChange}
                       // required
                     />
@@ -185,7 +185,7 @@ const EditProfile = () => {
                   </Col>
                   <Col sm={9}>
                     <Input
-                      type="text"
+                      type="number"
                       name="mobileNo"
                       placeholder="Edit your mobile number"
                       value={userData.mobileNo}

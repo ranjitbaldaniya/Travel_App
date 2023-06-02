@@ -27,7 +27,7 @@ const Profile = () => {
       <h3 className="text-center mb-3 text-primary">{userData.firstName} Profile</h3>
 
         <Col lg={1} md={1}></Col>
-        <Col lg={3} md={4}>
+        <Col lg={3} md={4} className="my-auto">
           <Card>
             <CardBody className="text-center">
               <img
@@ -37,8 +37,8 @@ const Profile = () => {
                 style={{ width: "150px" }}
               />
               <h5 className="my-3">{userData.firstName}</h5>
-              <p className="text-muted mb-1">Full Stack Developer</p>
-              <p className="text-muted mb-1">Bay Area, San Francisco, CA</p>
+              {/* <p className="text-muted mb-1">Full Stack Developer</p> */}
+              {/* <p className="text-muted mb-1">Bay Area, San Francisco, CA</p> */}
               {/* <div className="d-flex justify-content-center mb-2">
               <button type="button" className="btn btn-primary">
                 Follow

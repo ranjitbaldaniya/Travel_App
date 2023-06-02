@@ -84,7 +84,7 @@ const EditUser = () => {
     try {
       const response = await axios.post(url, dataToUpdate, header);
       console.log("res of update", response);
-      TostSucess("User is edited successfully!");
+      TostSucess("User is updated successfully!");
       navigate("/admin/users");
       //   console.log("12345", JSON.parse(response.config.data  ));
     } catch (error) {
@@ -187,6 +187,7 @@ const EditUser = () => {
                           name="mobileNo"
                           placeholder="Enter your number"
                           type="number"
+                          maxLength={"10"}
                           value={userData.mobileNo}
                           onChange={handleChange}
                           // required
@@ -273,6 +274,7 @@ const EditUser = () => {
                         <Input
                           name="dob"
                           placeholder="date placeholder"
+                          min='1990-01-01' max='2023-01-01'
                           type="date"
                           value={moment(userData.dob)
                             .utc()

@@ -50,7 +50,7 @@ const Home = () => {
             <Col lg="6" xl="3" className="mb-4">
               <Card className="mb-4 mb-xl-0">
                 <CardBody>
-                  <img src={data.Image} height={150} width={200} alt="tour image" />
+                  <img src={`http://localhost:3001/` + data.Image} height={150} width={200} alt="tour image" />
                   <Row>
                     <div className="col">
                       <CardTitle tag="h5" className=" text-muted mb-0">

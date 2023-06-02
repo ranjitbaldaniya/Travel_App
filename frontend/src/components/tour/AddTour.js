@@ -14,39 +14,58 @@ import {
   Label,
   Card,
   CardBody,
+  FormFeedback,
 } from "reactstrap";
 import { TostSucess } from "../commonFunctions/Tost.js";
 
 const AddTour = () => {
-  const [tourData, setTourData] = useState({});
-  // console.log("tourdata", tourData);
+  const [name, setName] = useState("");
+  const [discription, setDiscription] = useState("");
+  const [price, setPrice] = useState("");
+  const [packageDays, setPackageDays] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [image, setImage] = useState("");
+
+  // console.log("tourdata", startDate, endDate);
   const [errorName, setErrorName] = useState("");
   const [error, setError] = useState(null);
-  // console.log("errorName", errorName);
+  // console.log("image", image);
 
   const navigate = useNavigate();
-
-  //handlechange for handling events
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setTourData({ ...tourData, [name]: value });
-  };
 
   //handlesubmit for submiting form data
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(tourData);
-    handleAddTour(tourData);
+
+    const formData = new FormData();
+    formData.append("Name", name);
+    formData.append("Discription", discription);
+    formData.append("Price", price);
+    formData.append("PackageDays", packageDays);
+    formData.append("StartDate", startDate);
+    formData.append("EndDate", endDate);
+    formData.append("Image", image);
+
+    console.log(formData);
+
+    handleAddTour(formData);
   };
 
   //handleAddTour function
-  const handleAddTour = async (tourData) => {
+  const handleAddTour = async (formData) => {
     let url = "http://localhost:3001/tour/addtour";
-    try {
-      const response = await axios.post(url, tourData);
-      console.log("res", response);
-      setTourData({});
 
+    try {
+      const response = await axios.post(url, formData);
+      console.log("res", response);
+      setName("");
+      setDiscription("");
+      setPrice("");
+      setPackageDays("");
+      setStartDate("");
+      setEndDate("");
+      setImage("");
       TostSucess("Tour Added Successfully!!");
       navigate("/admin");
     } catch (error) {
@@ -77,7 +96,12 @@ const AddTour = () => {
           <Col lg={8} md={10}>
             <Card>
               <CardBody>
-                <Form role="form" onSubmit={handleSubmit}>
+                <Form
+                  role="form"
+                  onSubmit={handleSubmit}
+                  method="post"
+                  enctype="multipart/form-data"
+                >
                   <FormGroup>
                     <Label>Tour Name</Label>
                     <InputGroup className="input-group-alternative mb-3">
@@ -85,7 +109,7 @@ const AddTour = () => {
                         name="Name"
                         placeholder="Enter tour name"
                         type="text"
-                        onChange={handleChange}
+                        onChange={(e) => setName(e.target.value)}
                         // required
                       />
                     </InputGroup>
@@ -103,7 +127,7 @@ const AddTour = () => {
                         name="Discription"
                         placeholder="Enter tour discription"
                         type="text"
-                        onChange={handleChange}
+                        onChange={(e) => setDiscription(e.target.value)}
                         // required
                       />
                     </InputGroup>
@@ -122,8 +146,8 @@ const AddTour = () => {
                           <Input
                             name="Price"
                             placeholder="Enter tour price"
-                            type="text"
-                            onChange={handleChange}
+                            type="number"
+                            onChange={(e) => setPrice(e.target.value)}
                             // required
                           />
                         </InputGroup>
@@ -142,8 +166,9 @@ const AddTour = () => {
                           <Input
                             name="PackageDays"
                             placeholder="Enter tour days"
-                            type="text"
-                            onChange={handleChange}
+                            type="number"
+                            onChange={(e) => setPackageDays(e.target.value)}
+
                             // required
                           />
                         </InputGroup>
@@ -166,7 +191,8 @@ const AddTour = () => {
                             name="StartDate"
                             placeholder="date placeholder"
                             type="date"
-                            onChange={handleChange}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            max={endDate}
                             // required
                           />
                         </InputGroup>
@@ -182,14 +208,24 @@ const AddTour = () => {
                       <FormGroup>
                         <Label>EndDate</Label>
                         <InputGroup className="input-group-alternative">
+                          {console.log(
+                            "startDate >= endDate",
+                            startDate < endDate
+                          )}
                           <Input
                             name="EndDate"
                             placeholder="date placeholder"
                             type="date"
-                            onChange={handleChange}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            min={startDate}
+                            max="2025-01-01"
+                            invalid={
+                              startDate && endDate && startDate >= endDate
+                            }
                             // required
                           />
                         </InputGroup>
+
                         {/* {console.log("error" , errorName == '"firstName"')} */}
                         {errorName == '"EndDate"' ? (
                           <span>{errorDiv}</span>
@@ -198,19 +234,46 @@ const AddTour = () => {
                         )}
                       </FormGroup>
                     </Col>
+                    {startDate && endDate && startDate >= endDate ? (
+                      <div className="text-center">
+                        <i class="text-danger">
+                          * Startdate must be less then Enddate
+                        </i>
+                      </div>
+                    ) : null}
                   </Row>
                   <FormGroup>
-                    <Label for="exampleFile">Image</Label>
+                    <Label for="exampleCustomFileBrowser">Image</Label>
                     <Input
                       type="file"
                       id="exampleCustomFileBrowser"
                       name="Image"
+                      accept=".png, .jpg, .jpeg"
                       label={"Choose an image file"}
-                      onChange={handleChange}
+                      onChange={(e) => setImage(e.target.files[0])}
+                      required
+                      // onChange={handleChange}
                     />
+                    {errorName == '"Image"' ? (
+                      <span>{errorDiv}</span>
+                    ) : (
+                      <span></span>
+                    )}
                   </FormGroup>
                   <div className="text-center">
-                    <Button color="primary" type="submit">
+                    <Button
+                      color="warning"
+                      type="button"
+                      className="me-5"
+                      onClick={() => navigate("/admin")}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      color="primary"
+                      type="submit"
+                      disabled={startDate >= endDate}
+                    >
                       Submit
                     </Button>
                   </div>
