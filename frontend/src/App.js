@@ -17,6 +17,10 @@ import EditProfile from "./components/profile/EditProfile";
 import UserListing from "./components/user/UserListing";
 import AddUser from "./components/user/AddUser";
 import EditUser from "./components/user/EditUser";
+import TourDetails from "./components/tour/TourDetails";
+import Inquiry from "./components/inquiry/Inquiry";
+import AddInquiry from "./components/inquiry/AddInquiry";
+import EditInquiry from "./components/inquiry/EditInquiry";
 
 function App() {
   return (
@@ -36,11 +40,15 @@ function App() {
           <Route path="/admin/editprofile" element={<EditProfile />} />
           <Route path="/admin/users" element={<UserListing />} />
           <Route path="/admin/adduser" element={<AddUser />} />
-          <Route path="/admin/edituser/:id" element={<EditUser/>} />
-
+          <Route path="/admin/edituser/:id" element={<EditUser />} />
+          <Route path="/admin/inquiries" element={<Inquiry />} />
+          <Route path="/admin/addinquiries" element={<AddInquiry />} />
+          <Route path="/admin/editinquiries/:id" element={<EditInquiry />} />
         </Route>
         <Route path="/user" element={<UserLayout />}>
-          <Route index element={<UserDashboard />} />
+          <Route index element={<Home />} />
+          <Route path="/user/tour/:id" element={<TourDetails />} />
+          {/* <Route path="/user/tour/inquiry" element={<Inquiry/>} /> */}
         </Route>
         <Route path="*" element={<>Page Not-Found - 404</>} />
       </Routes>

@@ -13,7 +13,7 @@ const Profile = () => {
   //handle for getting credencials
   const handleGetAdminDetails = () => {
     const userDetails = sessionStorage.getItem("user");
-    console.log("123", JSON.parse(userDetails));
+    // console.log("123", JSON.parse(userDetails));
     return JSON.parse(userDetails);
   };
 

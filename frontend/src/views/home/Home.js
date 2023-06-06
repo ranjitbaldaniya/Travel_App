@@ -1,14 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardTitle, Col, Container, Row, CardBody } from "reactstrap";
+import {
+  Card,
+  CardTitle,
+  Col,
+  Container,
+  Row,
+  CardBody,
+  Button,
+  CardSubtitle,
+  CardText,
+} from "reactstrap";
 import axios from "axios";
+import moment from "moment";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [tourData, setTourData] = useState([]);
+  const [userData, setUserData] = useState("");
+
+  const navigate = useNavigate();
 
   //useEffect for fetching Tour data
   useEffect(() => {
     handleGetTour();
-  }, []);
+    handleGetAdminDetails();
+    const data = handleGetAdminDetails();
+    setUserData(data);
+  }, [sessionStorage.getItem("user")]);
 
   //handleLogin function
   const handleGetTour = async () => {
@@ -20,6 +38,21 @@ const Home = () => {
     } catch (error) {
       console.log("error in catch", error);
     }
+  };
+  //handle for getting credencials
+  const handleGetAdminDetails = () => {
+    const userDetails = sessionStorage.getItem("user");
+    // console.log("123" , JSON.parse(userDetails));
+    return JSON.parse(userDetails);
+  };
+  //handleInquiry
+  const handleInquiry = (id) => {
+    // console.log("id", id);
+    navigate(`/user/tour/${id}`);
+    // if (userData) {
+    // } else {
+    //   navigate("/login");
+    // }
   };
   return (
     <>
@@ -45,30 +78,53 @@ const Home = () => {
             </div>
           </Col>
         </Row>
-        <Row>
+        <Row className="">
           {tourData.map((data, i) => (
-            <Col lg="6" xl="3" className="mb-4">
-              <Card className="mb-4 mb-xl-0">
+            <Col
+              lg="4"
+              xl="3"
+              md={3}
+              className="mb-4 d-flex justisy-content-center"
+            >
+              <Card
+                style={{
+                  width: "18rem",
+                }}
+                className="shadow"
+              >
+                <img
+                  alt="Sample"
+                  className=""
+                  height={220}
+                  src={`http://localhost:3001/` + data.Image}
+                />
                 <CardBody>
-                  <img src={`http://localhost:3001/` + data.Image} height={150} width={200} alt="tour image" />
-                  <Row>
-                    <div className="col">
-                      <CardTitle tag="h5" className=" text-muted mb-0">
-                        <span className="h2 font-weight-bold mb-0">
-                          {data.Name}
-                        </span>
-                      </CardTitle>
-                      Price: {data.Price} /-
-                    </div>
-                    <Col className="col-auto">
-                      <div className=" bg-warning text-white rounded-circle shadow">
-                        <h4 className="text-success">{data.PackageDays}</h4>{" "}
-                      </div>
-                    </Col>
-                  </Row>
-                  <p className="mt-3 mb-0 text-muted text-sm">
-                    <span className="text-wrap">{data.Discription}</span>
-                  </p>
+                  <CardTitle tag="h5">{data.Name}</CardTitle>
+                  <CardSubtitle className="mb-2 text-muted" tag="h6">
+                    Price: {data.Price}
+                  </CardSubtitle>
+                  <CardText>{data.Discription}</CardText>
+                  <div className="d-flex justify-content-between">
+                    <CardSubtitle>
+                      Package <br />
+                      Days: {data.PackageDays}
+                    </CardSubtitle>
+                    <CardText>
+                      From {moment(data.StartDate).utc().format("DD-MM-YYYY")}{" "}
+                      <br />
+                      To {moment(data.EndDate).utc().format("DD-MM-YYYY")}
+                    </CardText>
+                  </div>
+                  <div className="w-100">
+                    {" "}
+                    <Button
+                      className="btn btn-sm w-100"
+                      color="info"
+                      onClick={() => handleInquiry(data.id)}
+                    >
+                      Check Details
+                    </Button>
+                  </div>
                 </CardBody>
               </Card>
             </Col>

@@ -3,6 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 
  //notification toast
  const TostSucess = (message) => {
+  console.log("called")
     toast.success(message, {
       position: toast.POSITION.TOP_RIGHT,
       autoClose: 2000,

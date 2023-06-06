@@ -1,11 +1,16 @@
 var db = require("../models");
-const { InquiryValidation } = require("../middleware/InquiryValidation.js");
+const {
+  CreateInquiryValidation,
+  UpdateInquiryValidation
+} = require("../middleware/InquiryValidation.js");
 const Inquiry = db.Inquiry;
 
 //create inquiry
 const createInquiry = async (req, res) => {
   const data = req.body;
-  const result = InquiryValidation(data);
+  console.log("data", data);
+
+  const result = CreateInquiryValidation(data);
   const { value, error } = result;
   console.log("value", value);
   const valid = error == null;
@@ -30,7 +35,7 @@ const updateInquiry = async (req, res) => {
   const data = req.body;
   let id = req.params.id;
 
-  const result = InquiryValidation(data);
+  const result = UpdateInquiryValidation(data);
   const { value, error } = result;
   console.log("value", value);
   const valid = error == null;
@@ -40,6 +45,7 @@ const updateInquiry = async (req, res) => {
       const updateInquiry = await Inquiry.update(data, { where: { id: id } });
       res.status(200).json({ message: "Inquiry Created!", updateInquiry });
     } else {
+      const { details } = error;
       const message = details.map((i) => i.message).join(",");
       res.status(422).json({ error: message });
     }

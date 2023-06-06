@@ -50,7 +50,7 @@ const AdminDashboard = () => {
     let url = "http://localhost:3001/tour/viewalltour";
     try {
       const response = await axios.get(url);
-      console.log("res", response.data);
+      // console.log("res", response.data);
       setTourData(response.data);
     } catch (error) {
       console.log("error in catch", error);
@@ -77,7 +77,7 @@ const AdminDashboard = () => {
     let url = `http://localhost:3001/tour/deleteTour/${Id}`;
     try {
       const response = await axios.get(url);
-      console.log("delete res", response);
+      // console.log("delete res", response);
       toggle();
       handleGetTour();
       TostSucess("Tour is deleted successfully!");
@@ -131,7 +131,7 @@ const AdminDashboard = () => {
                       <td>{data.PackageDays}</td>
                       <td>{data.Price}</td>
                       <td>
-                        {console.warn("data", data)}
+                        {/* {console.warn("data", data)} */}
                         {/* src="../../publicC:\fakepath\Taj-Mahal.jpg" */}
                         <img
                           src={`http://localhost:3001/` + data.Image}

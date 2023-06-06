@@ -40,15 +40,6 @@ const AdminNavbar = () => {
           </Link>
         </div>
         <div className="topRight">
-          {/* <div className="topbarIconContainer">
-            Nav
-            <span className="topIconBadge">2</span>
-          </div> */}
-          {/* <div className="topbarIconContainer">
-            Mark
-            <span className="topIconBadge">2</span>
-          </div> */}
-          {/* <div className="topbarIconContainer">Inquiry</div> */}
           <h2 className="me-5 text-light">Welcome {userName}</h2>
           <PopupMenu>
             <img
