@@ -10,6 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalBody,
+  Input,
 } from "reactstrap";
 import moment from "moment";
 import { TostSucess } from "../../components/commonFunctions/Tost.js";
@@ -18,9 +19,12 @@ import ApiHeader from "../commonFunctions/ApiHeader";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import Pagination from "../../components/commonFunctions/Pagination.js";
+import  Loader from '../../components/commonFunctions/Loader.js'
 
 const UserListing = () => {
   const [listUsers, setListUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   // Modal open state
   const [modal, setModal] = useState(false);
   const [delId, setDelId] = useState("");
@@ -41,6 +45,7 @@ const UserListing = () => {
 
   //useEffect for fetching Tour data
   useEffect(() => {
+    setLoading(false)
     handleListUser();
   }, []);
 
@@ -52,6 +57,7 @@ const UserListing = () => {
       const response = await axios.get(url, header);
       console.log("res", response.data);
       setListUsers(response.data);
+      setLoading(true)
     } catch (error) {
       console.log("error in catch", error);
     }
@@ -88,6 +94,11 @@ const UserListing = () => {
   };
   return (
     <>
+     {!loading ? (
+        <>
+      <Loader/>
+        </>
+      ) : (
       <Container>
         <Row>
           <Col md={12} lg={12}>
@@ -103,7 +114,18 @@ const UserListing = () => {
             </div>
           </Col>
         </Row>
-
+        <Row>
+            <Col lg={3}></Col>
+            <Col md={12} lg={6}>
+              <div className="d-flex justify-content-end mb-3 mt-3">
+                <Input
+                  type="text"
+                  placeholder="Search here..."
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </Col>
+          </Row>
         <Row>
           <Col md={12} lg={12}>
             <Table striped>
@@ -121,7 +143,26 @@ const UserListing = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentTour.map((data, i) => (
+                {currentTour
+                    .filter((data) => {
+                      if (search === "") {
+                        return data;
+                      }else if (
+                        data.firstName.toLowerCase().includes(search.toLowerCase())
+                      ) {
+                        return data;
+                      } else if (
+                        data.lastName.toLowerCase().includes(
+                          search.toLowerCase()
+                        )
+                      ) {
+                        return data;
+                      } else if (
+                        data.email.toLowerCase().includes(search.toLowerCase())
+                      ) {
+                        return data;
+                      }
+                    }).map((data, i) => (
                   <>
                     <tr key={i}>
                       <th scope="row">{data.id}</th>
@@ -177,7 +218,7 @@ const UserListing = () => {
             />
           </Col>
         </Row>
-      </Container>
+      </Container>)}
     </>
   );
 };
