@@ -1,6 +1,8 @@
 var db = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { Op } = require('sequelize');
+
 const {
   UserValidation,
   UpdateUserValidation,
@@ -98,8 +100,21 @@ const updateUser = async (req, res) => {
 
 //get all user
 const getAllUser = async (req, res) => {
+  // console.log("1", req.query.search);
+  const searchQuery = req.query.search;
   try {
-    const data = await User.findAll();
+    let whereCondition = {};
+
+    if (searchQuery) {
+      whereCondition = {
+        [Op.or]: [
+          { firstName: { [Op.like]: `%${searchQuery}%` } },
+          // { email: { [Op.like]: `%${searchQuery}%` } },
+        ],
+      };
+    }
+
+    const data = await User.findAll({ where: whereCondition });
     res.status(200).json(data);
   } catch (error) {
     res.status(404).send(error);
@@ -195,7 +210,7 @@ const addUser = async (req, res) => {
         updateBy: null,
       };
 
-      const userCreated = await await User.create(userObject);
+      const userCreated = await User.create(userObject);
       res.status(200).json({ message: "User created", userCreated });
     } else {
       const { details } = error;

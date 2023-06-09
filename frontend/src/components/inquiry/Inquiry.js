@@ -23,7 +23,11 @@ import Loader from "../../components/commonFunctions/Loader.js";
 
 const Inquiry = () => {
   const [inquiries, setInquiries] = useState([]);
+  console.log("inquiries", inquiries);
+
   const [search, setSearch] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  console.log("filterdata", filteredData);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [userPerPage] = useState(10);
@@ -33,10 +37,10 @@ const Inquiry = () => {
   //get current tour
   const indexOfLastInquiries = currentPage * userPerPage;
   const indexOfFirstInquiries = indexOfLastInquiries - userPerPage;
-  const currentPageInquiries = inquiries.slice(
-    indexOfFirstInquiries,
-    indexOfLastInquiries
-  );
+  const currentPageInquiries =
+    search.length == 0
+      ? inquiries.slice(indexOfFirstInquiries, indexOfLastInquiries)
+      : filteredData.slice(indexOfFirstInquiries, indexOfLastInquiries);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const toggle = () => setModal(!modal);
@@ -47,7 +51,7 @@ const Inquiry = () => {
     let url = "http://localhost:3001/inquiry/list";
     try {
       const response = await axios.get(url, header);
-      // console.log("response", response);
+      console.log("response", response);
       setInquiries(response.data);
       setLoading(true);
     } catch (error) {
@@ -89,6 +93,30 @@ const Inquiry = () => {
       console.log("error in catch", error);
     }
   };
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    if (search !== "") {
+      const filterData = inquiries.filter((item) => {
+        const titleMatch = Object.values(item.title)
+          .join("")
+          .toLowerCase()
+          .includes(search.toLowerCase());
+
+        const discription = Object.values(item.discription)
+          .join("")
+          .toLowerCase()
+          .includes(search.toLowerCase());
+
+        return titleMatch || discription;
+      });
+      console.log("filtered data", filterData);
+      setFilteredData(filterData);
+    } else {
+      setFilteredData(inquiries);
+    }
+  };
+
   return (
     <>
       {!loading ? (
@@ -118,7 +146,7 @@ const Inquiry = () => {
                 <Input
                   type="text"
                   placeholder="Search here..."
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={handleSearch}
                 />
               </div>
             </Col>
@@ -139,53 +167,37 @@ const Inquiry = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentPageInquiries
-                    .filter((data) => {
-                      if (search === "") {
-                        return data;
-                      } else if (
-                        data.title.toLowerCase().includes(search.toLowerCase())
-                      ) {
-                        return data;
-                      } else if (
-                        data.discription
-                          .toLowerCase()
-                          .includes(search.toLowerCase())
-                      ) {
-                        return data;
-                      }
-                    })
-                    .map((data, i) => (
-                      <>
-                        <tr key={i}>
-                          <th scope="row">{data.id}</th>
-                          <td>{data.title}</td>
-                          <td>{data.discription}</td>
-                          <td>{data.userId}</td>
-                          <td>{data.tourId}</td>
+                  {currentPageInquiries.map((data, i) => (
+                    <>
+                      <tr key={i}>
+                        <th scope="row">{data.id}</th>
+                        <td>{data.title}</td>
+                        <td>{data.discription}</td>
+                        <td>{data.userId}</td>
+                        <td>{data.tourId}</td>
 
-                          <td>
-                            {moment(data.createdAt).utc().format("DD-MM-YYYY")}
-                          </td>
-                          {/* <td>{data.createdBy}</td> */}
-                          <td>
-                            <div className="d-flex justify-content-around">
-                              <FiEdit
-                                className="text-success "
-                                style={{ cursor: "pointer" }}
-                                onClick={() => handleEdit(data.id)}
-                              />
+                        <td>
+                          {moment(data.createdAt).utc().format("DD-MM-YYYY")}
+                        </td>
+                        {/* <td>{data.createdBy}</td> */}
+                        <td>
+                          <div className="d-flex justify-content-around">
+                            <FiEdit
+                              className="text-success "
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleEdit(data.id)}
+                            />
 
-                              <MdDelete
-                                className="text-danger"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => handleDelete(data.id)}
-                              />
-                            </div>
-                          </td>
-                        </tr>
-                      </>
-                    ))}
+                            <MdDelete
+                              className="text-danger"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleDelete(data.id)}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    </>
+                  ))}
                 </tbody>
               </Table>
             </Col>

@@ -1,5 +1,4 @@
 import React from "react";
-import AdminNavbar from "../components/navbar/AdminNavbar";
 import { Outlet } from "react-router-dom";
 import { Col, Row, Container } from "reactstrap";
 import AuthNavbar from "../components/navbar/AuthNavbar";

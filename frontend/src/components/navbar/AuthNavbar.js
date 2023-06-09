@@ -9,8 +9,9 @@ import {
   NavItem,
   NavLink,
 } from "reactstrap";
-import { PopupMenu } from "react-simple-widgets";
 import { Button } from "reactstrap";
+import logo from "../../assets/logo.png";
+
 const AuthNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userName, setUserName] = useState("");
@@ -22,7 +23,7 @@ const AuthNavbar = () => {
   //handle for getting credencials
   const handleGetAdminDetails = () => {
     const userDetails = sessionStorage.getItem("user");
-    // console.log("123" , JSON.parse(userDetails));
+    console.log("123", JSON.parse(userDetails));
     return JSON.parse(userDetails);
   };
 
@@ -34,15 +35,20 @@ const AuthNavbar = () => {
 
   //handlelogout
   const handleLogout = () => {
+    console.log("clicked");
     localStorage.clear();
     sessionStorage.clear();
     navigate("/");
   };
   return (
     <>
-      <Navbar color="dark" dark expand="md">
+      <Navbar color="light" light expand="md">
         <Link to="/">
-          <NavbarBrand className="text-warning">Travel_App</NavbarBrand>
+          <NavbarBrand className="text-warning">
+            {" "}
+            <img src={logo} alt="" />
+            <span className="text-primary ">Travel_App</span>
+          </NavbarBrand>
         </Link>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
@@ -53,64 +59,29 @@ const AuthNavbar = () => {
                 <NavItem>
                   <NavLink>
                     {/* <Link to="/" className="text-light"> */}{" "}
-                    <h4 className="text-warning"> Welcome {userName}</h4>
+                    <h4 className="text-primary mt-1"> Welcome {userName}</h4>
                     {/* </Link> */}
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink>
-                    <div className="topRight">
-                      <PopupMenu>
-                        <img
-                          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                          alt="avatar"
-                          className="rounded-circle img-fluid"
-                          style={{ width: "35px" }}
-                        />
-
-                        <div className="card text-start">
-                          <div className="card-body px-4 py-4">
-                            <div
-                              id="circle-avatar"
-                              className="text-center mx-auto mb-4"
-                            >
-                              <img
-                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                                alt="avatar"
-                                className="rounded-circle img-fluid"
-                                style={{ width: "50px" }}
-                              />
-                            </div>
-
-                            <h5 className="text-center mb-0">{userName}</h5>
-                            <p className="text-center mb-2">{userData.email}</p>
-
-                            <hr style={{ margin: "0 -24px 24px" }} />
-
-                            <div className="d-grid">
-                              <Button
-                                className="btn btn-secondary"
-                                onClick={handleLogout}
-                              >
-                                Logout
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </PopupMenu>
-                    </div>
+                    <Button color="primary" onClick={handleLogout}>
+                      {" "}
+                      Logout
+                    </Button>
                   </NavLink>
                 </NavItem>
+                <NavItem></NavItem>
               </Nav>
             </>
           ) : (
             <>
-              <Nav className="ms-auto text-dark" navbar>
+              <Nav className="ms-auto" navbar>
                 <NavItem>
                   <NavLink>
-                    <Link to="/" className="text-light">
+                    <Link to="/" className="text-primary">
                       {" "}
-                      Tour
+                      Tour Packages
                     </Link>
                   </NavLink>
                 </NavItem>
@@ -118,7 +89,7 @@ const AuthNavbar = () => {
               <Nav navbar>
                 <NavItem>
                   <NavLink>
-                    <Link to="/login" className="text-light">
+                    <Link to="/login" className="text-primary">
                       {" "}
                       Login
                     </Link>
@@ -126,7 +97,7 @@ const AuthNavbar = () => {
                 </NavItem>
                 <NavItem>
                   <NavLink>
-                    <Link to="/register" className="text-light">
+                    <Link to="/register" className="text-primary">
                       {" "}
                       Register
                     </Link>

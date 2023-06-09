@@ -21,13 +21,14 @@ import TourDetails from "./components/tour/TourDetails";
 import Inquiry from "./components/inquiry/Inquiry";
 import AddInquiry from "./components/inquiry/AddInquiry";
 import EditInquiry from "./components/inquiry/EditInquiry";
+import MainDashBoard from "./views/home/MainDashBoard";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Auth />}>
-          <Route index element={<Home />} />
+          <Route index element={<MainDashBoard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Route>
@@ -46,7 +47,7 @@ function App() {
           <Route path="/admin/editinquiries/:id" element={<EditInquiry />} />
         </Route>
         <Route path="/user" element={<UserLayout />}>
-          <Route index element={<Home />} />
+          <Route index element={<MainDashBoard />} />
           <Route path="/user/tour/:id" element={<TourDetails />} />
           {/* <Route path="/user/tour/inquiry" element={<Inquiry/>} /> */}
         </Route>

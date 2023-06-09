@@ -189,8 +189,9 @@ const AddUser = () => {
 
                         <InputGroup className="input-group-alternative">
                           <Input
-                            type={"select"}
+                            type="select"
                             name="role"
+                            defaultValue={"admin"}
                             onChange={handleChange}
                           >
                             <option value={"admin"}>Admin</option>
@@ -255,7 +256,8 @@ const AddUser = () => {
                             name="dob"
                             placeholder="date placeholder"
                             type="date"
-                            min='1990-01-01' max='2023-01-01'
+                            min="1990-01-01"
+                            max="2023-01-01"
                             onChange={handleChange}
                             // required
                           />

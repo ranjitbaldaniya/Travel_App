@@ -68,6 +68,7 @@ const getSingleInquiry = async (req, res) => {
 
 //Get All Inquiry
 const getAllInquiry = async (req, res) => {
+  console.log("req" , req.body)
   try {
     const data = await Inquiry.findAll();
     res.status(200).json(data);

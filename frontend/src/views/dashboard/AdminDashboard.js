@@ -25,6 +25,7 @@ const AdminDashboard = () => {
   const [tourData, setTourData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
   //Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [tourPerPage] = useState(5);
@@ -32,7 +33,10 @@ const AdminDashboard = () => {
   //get current tour
   const indexOfLastTour = currentPage * tourPerPage;
   const indexOfFirstTour = indexOfLastTour - tourPerPage;
-  const currentTour = tourData.slice(indexOfFirstTour, indexOfLastTour);
+  const currentTour =
+    search.length == 0
+      ? tourData.slice(indexOfFirstTour, indexOfLastTour)
+      : filteredData.slice(indexOfFirstTour, indexOfLastTour);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -92,6 +96,29 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    if (search !== "") {
+      const filterData = tourData.filter((item) => {
+        const Name = Object.values(item.Name)
+          .join("")
+          .toLowerCase()
+          .includes(search.toLowerCase());
+
+        const Discription = Object.values(item.Discription)
+          .join("")
+          .toLowerCase()
+          .includes(search.toLowerCase());
+
+        return Name || Discription;
+      });
+      console.log("filtered data", filterData);
+      setFilteredData(filterData);
+    } else {
+      setFilteredData(tourData);
+    }
+  };
+
   // const StartDate = moment(tourData.StartDate).utc().format('DD-MM-YYYY')
   // console.log(StartDate)
   return (
@@ -123,7 +150,7 @@ const AdminDashboard = () => {
                 <Input
                   type="text"
                   placeholder="Search here..."
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={handleSearch}
                 />
               </div>
             </Col>
@@ -145,70 +172,50 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentTour
-                    .filter((data) => {
-                      if (search === "") {
-                        return data;
-                      } else if (
-                        data.Name.toLowerCase().includes(search.toLowerCase())
-                      ) {
-                        return data;
-                      } else if (
-                        data.Discription.toLowerCase().includes(
-                          search.toLowerCase()
-                        )
-                      ) {
-                        return data;
-                      } else if (
-                        data.Price.toLowerCase().includes(search.toLowerCase())
-                      ) {
-                        return data;
-                      }
-                    })
-                    .map((data, i) => (
-                      <>
-                        <tr key={i}>
-                          <th scope="row">{data.id}</th>
-                          <td>{data.Name}</td>
-                          <td style={{ width: "300px" }}>{data.Discription}</td>
-                          <td>{data.PackageDays}</td>
-                          <td>{data.Price}</td>
-                          <td>
-                            {/* {console.warn("data", data)} */}
-                            {/* src="../../publicC:\fakepath\Taj-Mahal.jpg" */}
-                            <img
-                              src={`http://localhost:3001/` + data.Image}
-                              className=""
-                              height={100}
-                              width={150}
-                              alt="tour image"
+                  {currentTour.map((data, i) => (
+                    <>
+                      <tr key={i}>
+                        <th scope="row">{data.id}</th>
+                        <td>{data.Name}</td>
+                        <td style={{ width: "300px" }}>{data.Discription}</td>
+                        <td>{data.PackageDays}</td>
+                        <td>{data.Price}</td>
+                        <td>
+                          {/* {console.warn("data", data)} */}
+                          {/* src="../../publicC:\fakepath\Taj-Mahal.jpg" */}
+                          <img
+                            src={`http://localhost:3001/` + data.Image}
+                            className=""
+                            height={100}
+                            width={150}
+                            alt="tour image"
+                          />
+                        </td>
+                        <td>
+                          {moment(data.StartDate).utc().format("DD-MM-YYYY")}
+                        </td>
+                        <td>
+                          {moment(data.EndDate).utc().format("DD-MM-YYYY")}
+                        </td>
+                        <td>
+                          <div className="d-flex justify-content-around">
+                            <FiEdit
+                              className="text-success "
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleEdit(data.id)}
                             />
-                          </td>
-                          <td>
-                            {moment(data.StartDate).utc().format("DD-MM-YYYY")}
-                          </td>
-                          <td>
-                            {moment(data.EndDate).utc().format("DD-MM-YYYY")}
-                          </td>
-                          <td>
-                            <div className="d-flex justify-content-around">
-                              <FiEdit
-                                className="text-success "
-                                style={{ cursor: "pointer" }}
-                                onClick={() => handleEdit(data.id)}
-                              />
 
-                              <MdDelete
-                                className="text-danger"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => handleDelete(data.id)}
-                                // onClick={}
-                              />
-                            </div>
-                          </td>
-                        </tr>
-                      </>
-                    ))}
+                            <MdDelete
+                              className="text-danger"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleDelete(data.id)}
+                              // onClick={}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    </>
+                  ))}
                 </tbody>
               </Table>
 
