@@ -17,14 +17,15 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 
 const Register = () => {
   const [userData, setUserData] = useState({});
   const [errorName, setErrorName] = useState("");
   const [error, setError] = useState(null);
-  console.log("errorName", errorName);
+  // console.log("errorName", errorName);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   //handlechange for handling events
   const handleChange = (e) => {
@@ -52,6 +53,7 @@ const Register = () => {
     try {
       const response = await axios.post(url, userData);
       console.log("res", response);
+      handleSendEmail();
       setUserData({});
       alert("User Registered Successfully!!");
       navigate("/login");
@@ -60,6 +62,49 @@ const Register = () => {
       setErrorName(error.response.data.error.split(" ")[0]);
       setError(error.response.data.error);
     }
+  };
+
+  //handleSendEmail
+
+  const handleSendEmail = () => {
+    const form = document.createElement("form");
+    form.style.display = "none";
+
+    const inputToName = document.createElement("input");
+    inputToName.type = "text";
+    inputToName.name = "to_name";
+    inputToName.value = "Ranjit";
+    form.appendChild(inputToName);
+
+    const inputFromName = document.createElement("input");
+    inputFromName.type = "text";
+    inputFromName.name = "from_name";
+    inputFromName.value = userData.firstName;
+    form.appendChild(inputFromName);
+
+    const inputSubject = document.createElement("input");
+    inputSubject.type = "text";
+    inputSubject.name = "email";
+    inputSubject.value = userData.email;
+    form.appendChild(inputSubject);
+
+    document.body.appendChild(form);
+console.log("formData" , form)
+    emailjs
+      .sendForm(
+        "service_oawdr9j", // service_id
+        "template_fhvhz2w", // template_id
+        form,
+        "muaAFSUz_GoZZ36TR" // public_key
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
   };
 
   //error div
@@ -104,7 +149,7 @@ const Register = () => {
                       />
                     </InputGroup>
                     {/* {console.log("error" , errorName == '"firstName"')} */}
-                    {errorName == '"firstName"' ? (
+                    {errorName === '"firstName"' ? (
                       <span>{errorDiv}</span>
                     ) : (
                       <span></span>
@@ -122,7 +167,7 @@ const Register = () => {
                         // required
                       />
                     </InputGroup>
-                    {errorName == '"lastName"' ? (
+                    {errorName === '"lastName"' ? (
                       <span>{errorDiv}</span>
                     ) : (
                       <span></span>
@@ -141,7 +186,7 @@ const Register = () => {
                         // required
                       />
                     </InputGroup>
-                    {errorName == '"email"' ? (
+                    {errorName === '"email"' ? (
                       <span>{errorDiv}</span>
                     ) : (
                       <span></span>
@@ -159,7 +204,7 @@ const Register = () => {
                         // required
                       />
                     </InputGroup>
-                    {errorName == '"password"' ? (
+                    {errorName === '"password"' ? (
                       <span>{errorDiv}</span>
                     ) : (
                       <span></span>
@@ -177,7 +222,7 @@ const Register = () => {
                         // required
                       />
                     </InputGroup>
-                    {errorName == '"Confirm' ? (
+                    {errorName === '"Confirm' ? (
                       <span>{errorDiv}</span>
                     ) : (
                       <span></span>
@@ -195,7 +240,7 @@ const Register = () => {
                         // required
                       />
                     </InputGroup>
-                    {errorName == '"mobileNo"' ? (
+                    {errorName === '"mobileNo"' ? (
                       <span>{errorDiv}</span>
                     ) : (
                       <span></span>
@@ -217,7 +262,7 @@ const Register = () => {
                           // required
                         />
                         {/* </InputGroup> */}
-                        {errorName == '"gender"' ? (
+                        {errorName === '"gender"' ? (
                           <span>{errorDiv}</span>
                         ) : (
                           <span></span>
@@ -250,7 +295,7 @@ const Register = () => {
                         // required
                       />
                     </InputGroup>
-                    {errorName == '"dob"' ? (
+                    {errorName === '"dob"' ? (
                       <span>{errorDiv}</span>
                     ) : (
                       <span></span>

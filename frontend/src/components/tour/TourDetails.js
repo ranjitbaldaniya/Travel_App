@@ -21,7 +21,8 @@ import {
 import ApiHeader from "../commonFunctions/ApiHeader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import  Loader from '../commonFunctions/Loader.js'
+import emailjs from "@emailjs/browser";
+import Loader from "../commonFunctions/Loader.js";
 const TourDetails = () => {
   const userId = useParams();
   // console.log("id", userId.id);
@@ -40,7 +41,7 @@ const TourDetails = () => {
   const [title, setTitle] = useState("");
   const [discription, setDiscription] = useState("");
   const [userData, setUserData] = useState("");
-
+  console.log("userData", userData);
   const toggle = () => {
     if (userData) {
       setModal(!modal);
@@ -99,13 +100,16 @@ const TourDetails = () => {
       userId: userData.id,
     };
     let header = ApiHeader;
+
     // console.log("123", inquiryPayload , ApiHeader);
 
     let url = "http://localhost:3001/inquiry/addInquiry";
 
     try {
       const response = await axios.post(url, inquiryPayload, header);
+
       console.log("res", response);
+      handleSendEmail();
       setTitle("");
       setDiscription("");
       setUserData("");
@@ -117,6 +121,54 @@ const TourDetails = () => {
     } catch (error) {
       console.log("error", error);
     }
+  };
+
+  const handleSendEmail = () => {
+    const form = document.createElement("form");
+    form.style.display = "none";
+
+    const inputToName = document.createElement("input");
+    inputToName.type = "text";
+    inputToName.name = "to_name";
+    inputToName.value = "Ranjit";
+    form.appendChild(inputToName);
+
+    const inputFromName = document.createElement("input");
+    inputFromName.type = "text";
+    inputFromName.name = "from_name";
+    inputFromName.value = userData.firstName;
+    form.appendChild(inputFromName);
+
+    const inputSubject = document.createElement("input");
+    inputSubject.type = "text";
+    inputSubject.name = "subject";
+    inputSubject.value = title;
+    form.appendChild(inputSubject);
+
+    const inputMessage = document.createElement("textarea");
+    inputMessage.name = "message";
+    inputMessage.value = discription;
+    form.appendChild(inputMessage);
+
+    document.body.appendChild(form);
+
+    emailjs
+      .sendForm(
+        "service_oawdr9j", // service_id
+        "template_49zxjot", // template_id
+        form,
+        "muaAFSUz_GoZZ36TR" // public_key
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+
+    document.body.removeChild(form);
   };
 
   const TostSucess2 = (message) => {
@@ -138,7 +190,7 @@ const TourDetails = () => {
     <>
       {!loading ? (
         <>
-          <Loader/>
+          <Loader />
         </>
       ) : (
         <Container fluid>
