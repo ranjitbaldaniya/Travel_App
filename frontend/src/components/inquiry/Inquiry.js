@@ -160,6 +160,7 @@ const Inquiry = () => {
                     <th>#</th>
                     <th>Title</th>
                     <th>Discription</th>
+                    <th>Status</th>
                     <th>UserId</th>
                     <th>TourId</th>
                     <th>CreatedAt</th>
@@ -173,6 +174,7 @@ const Inquiry = () => {
                         <th scope="row">{data.id}</th>
                         <td>{data.title}</td>
                         <td>{data.discription}</td>
+                        <td>{data.status}</td>
                         <td>{data.userId}</td>
                         <td>{data.tourId}</td>
 

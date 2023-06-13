@@ -31,7 +31,7 @@ const UserListing = () => {
   const [delId, setDelId] = useState("");
   //Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [userPerPage] = useState(10);
+  const [userPerPage] = useState(5);
 
   //get current tour
   const indexOfLastTour = currentPage * userPerPage;

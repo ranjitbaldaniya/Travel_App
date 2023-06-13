@@ -98,6 +98,7 @@ const TourDetails = () => {
       createdBy: userData.id,
       tourId: tourId,
       userId: userData.id,
+      status: "Pending"
     };
     let header = ApiHeader;
 

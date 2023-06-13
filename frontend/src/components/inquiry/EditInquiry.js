@@ -29,6 +29,12 @@ const EditInquiry = () => {
   const [clintName, setClintName] = useState("");
   const [clintId, setClintId] = useState("");
   const [tourName, setTourName] = useState("");
+  const [status, setStatus] = useState("");
+  const StatusList = [
+    { value: "Pending", label: "Pending" },
+    { value: "InProgress", label: "InProgress" },
+    { value: "Completed", label: "Completed" },
+  ];
   // console.log("tourName", tourName);
 
   const [tourId, setTourId] = useState("");
@@ -47,6 +53,7 @@ const EditInquiry = () => {
       setDiscription(response.data.discription);
       setClintId(response.data.userId);
       setTourId(response.data.tourId);
+      setStatus(response.data.status)
     } catch (error) {
       console.log("error in catch", error);
     }
@@ -107,6 +114,7 @@ const EditInquiry = () => {
       discription,
       tourId: tourId,
       userId: clintId,
+      status : status,
       updatedBy: currentUser.id,
     };
 
@@ -162,6 +170,22 @@ const EditInquiry = () => {
                   />
                 </InputGroup>
               </FormGroup>
+
+              <FormGroup>
+                  <Label style={{ fontWeight: 700 }}>Status</Label>
+                  <Input
+                    type="select"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
+                    <option disabled>Select status</option>
+                    {StatusList.map((data) => (
+                      <option value={data.value} key={data.value}>
+                        {data.label}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
 
               <FormGroup>
                 <Label style={{ fontWeight: 700 }}>Select tour</Label>

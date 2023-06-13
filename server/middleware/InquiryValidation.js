@@ -9,7 +9,7 @@ const CreateInquiryValidation = (data) => {
     updatedBy: Joi.number(),
     userId: Joi.number().required(),
     tourId: Joi.number().required(),
-    status: Joi.boolean(),
+    status: Joi.string().required(),
   });
 
   const result = inquirySchema.validate(data);
@@ -26,7 +26,7 @@ const UpdateInquiryValidation = (data) => {
     updatedBy: Joi.number().required(),
     userId: Joi.number().required(),
     tourId: Joi.number().required(),
-    // status: Joi.boolean(),
+    status: Joi.string().required(),
   });
 
   const result = inquirySchema.validate(data);

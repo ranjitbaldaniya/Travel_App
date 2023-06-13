@@ -27,7 +27,13 @@ const AddInquiry = () => {
   // console.log("clintName", clintName);
   const [tourId, setTourId] = useState("");
   const [tourName, setTourName] = useState("");
-
+  const StatusList = [
+    { value: "Pending", label: "Pending" },
+    { value: "InProgress", label: "InProgress" },
+    { value: "Completed", label: "Completed" },
+  ];
+  const [status, setStatus] = useState("Pending");
+  console.log("status", status);
   const [title, setTitle] = useState("");
   const [discription, setDiscription] = useState("");
 
@@ -59,7 +65,7 @@ const AddInquiry = () => {
     let header = ApiHeader;
     try {
       const response = await axios.get(url, header);
-      // console.log("res", response.data);
+      console.log("res", response.data);
       setTourList(response.data);
     } catch (error) {
       console.log("error in catch", error);
@@ -75,7 +81,7 @@ const AddInquiry = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("called", tourId, clintId, title, discription, currentUser.id);
+    console.log("called", tourId, clintId, status , title, discription, currentUser.id);
 
     let inquiryPayload = {
       title,
@@ -83,6 +89,7 @@ const AddInquiry = () => {
       createdBy: currentUser.id,
       tourId: tourId,
       userId: clintId,
+      status: status,
     };
 
     console.log("inquiryPayload", inquiryPayload);
@@ -137,6 +144,22 @@ const AddInquiry = () => {
                   />
                 </InputGroup>
               </FormGroup>
+
+                <FormGroup>
+                  <Label style={{ fontWeight: 700 }}>Status</Label>
+                  <Input
+                    type="select"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
+                    <option disabled>Select status</option>
+                    {StatusList.map((data) => (
+                      <option value={data.value} key={data.value}>
+                        {data.label}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
 
               <FormGroup>
                 <Label style={{ fontWeight: 700 }}>Select tour</Label>
