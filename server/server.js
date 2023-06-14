@@ -23,11 +23,12 @@ app.use("/tour", tourRouter);
 const inquiryRouter = require("./routes/inquiryRoutes");
 app.use("/inquiry", inquiryRouter);
 
+//booking Router
+const bookingRouter = require("./routes/bookingRoutes");
+app.use("/booking", bookingRouter);
+
 //Static Images Folder
-app.use(
-  "/Images",
-  express.static("./Images")
-);
+app.use("/Images", express.static("./Images"));
 
 //test api
 app.get("/", (req, res) => {

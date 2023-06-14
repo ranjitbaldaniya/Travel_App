@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
+import "./TourPage.css"; // Import the CSS file
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Col,
@@ -17,6 +18,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Card,
+  CardBody,
 } from "reactstrap";
 import ApiHeader from "../commonFunctions/ApiHeader";
 import { toast, ToastContainer } from "react-toastify";
@@ -98,7 +101,7 @@ const TourDetails = () => {
       createdBy: userData.id,
       tourId: tourId,
       userId: userData.id,
-      status: "Pending"
+      status: "Pending",
     };
     let header = ApiHeader;
 
@@ -180,7 +183,7 @@ const TourDetails = () => {
   };
   const sectionStyle = {
     width: "100%",
-    height: "400px",
+    height: "350px",
     backgroundImage: "url(" + `http://localhost:3001/${image} ` + ")",
     backgroundPosition: "center",
     backgroundSize: "cover",
@@ -197,89 +200,108 @@ const TourDetails = () => {
         <Container fluid>
           <Row>
             <Col lg={3}></Col>
-            <Col lg={6}>
-              <section style={sectionStyle}></section>
-              <h2 className="text-center">
-                Tour Name : <span className="text-warning ">{name}</span>
-              </h2>
-              <h6>Discription :-</h6>
-              <p className="">{tourDiscription}</p>
-              <hr />
-              <div className="d-flex justify-content-between">
-                <h5 className=" text-muted " tag="h6">
-                  Price: <span className="text-dark">{price}</span>
-                </h5>
-                <h5 className=" text-muted ">
-                  Total Days:<span className="text-dark"> {packageDays}</span>
-                </h5>
-              </div>
-              <hr />
-              <div className="d-flex justify-content-between">
-                <h5 className=" text-muted ">
-                  Tour Start From{" "}
-                  <span className="text-dark">
-                    {moment(startDate).utc().format("DD-MM-YYYY")}
-                  </span>{" "}
-                  To{" "}
-                  <span className="text-dark">
-                    {moment(endDate).utc().format("DD-MM-YYYY")}
-                  </span>
-                </h5>
-                <Button
-                  color="warning"
-                  onClick={toggle}
-                  // onClick={() => navigate("/user/tour/inquiry")}
-                >
-                  Inquiry
-                </Button>
-              </div>
-              <hr />
 
-              <Modal isOpen={modal} toggle={toggle}>
-                <Form role="form" onSubmit={handleSubmit} method="post">
-                  <ModalHeader
-                    className="font-weight-bold text-center text-primary"
-                    toggle={toggle}
-                  >
-                    Book your tour now
-                  </ModalHeader>
-                  <ModalBody>
-                    <FormGroup>
-                      <Label>Title</Label>
-                      <InputGroup className="input-group-alternative mb-3">
-                        <Input
-                          name="title"
-                          placeholder="Enter title"
-                          type="text"
-                          onChange={(e) => setTitle(e.target.value)}
-                          required
-                        />
-                      </InputGroup>
-                    </FormGroup>
-                    <FormGroup>
-                      <Label>Discription</Label>
-                      <InputGroup className="input-group-alternative mb-3">
-                        <Input
-                          name="discription"
-                          placeholder="Enter discription"
-                          type="textarea"
-                          onChange={(e) => setDiscription(e.target.value)}
-                          required
-                        />
-                      </InputGroup>
-                    </FormGroup>
-                  </ModalBody>
-                  <ModalFooter className="text-center justify-content-center">
-                    <Button type="submit" color="primary">
-                      Submit
+            <Col lg={6}>
+              <Card>
+                <CardBody>
+                  <section
+                    style={sectionStyle}
+                    className="tour-section"
+                  ></section>
+                  <h2 className="text-center tour-name">
+                    Tour Name: <span className="text-warning">{name}</span>
+                  </h2>
+                  <h6 className="tour-description-heading">Description:</h6>
+                  <p className="tour-description">{tourDiscription}</p>
+                  <hr className="custom-hr" />
+                  <div className="d-flex justify-content-between tour-info">
+                    <h5 className="text-muted">
+                      Price: <span className="text-dark">{price}</span>
+                    </h5>
+                    <h5 className="text-muted">
+                      Total Days:{" "}
+                      <span className="text-dark">{packageDays}</span>
+                    </h5>
+                  </div>
+                  <hr className="custom-hr" />
+                  <div className="d-flex justify-content-between tour-dates">
+                    <h5 className="text-muted">
+                      Tour Start From{" "}
+                      <span className="text-dark">
+                        {moment(startDate).utc().format("DD-MM-YYYY")}
+                      </span>{" "}
+                      To{" "}
+                      <span className="text-dark">
+                        {moment(endDate).utc().format("DD-MM-YYYY")}
+                      </span>
+                    </h5>
+                    <Button
+                      color="warning"
+                      onClick={toggle}
+                      className="inquiry-button"
+                    >
+                      Inquiry
                     </Button>
-                    <Button color="warning" className="me-4" onClick={toggle}>
-                      Cancel
+                    <Button
+                      color="primary"
+                      className="inquiry-button"
+                      onClick={() => navigate("/user")}
+                    >
+                      Back
                     </Button>
-                  </ModalFooter>
-                </Form>
-              </Modal>
-              <ToastContainer />
+                  </div>
+
+                  <Modal isOpen={modal} toggle={toggle} className="tour-modal">
+                    <Form role="form" onSubmit={handleSubmit} method="post">
+                      <ModalHeader
+                        className="font-weight-bold text-center text-primary"
+                        toggle={toggle}
+                      >
+                        Book your tour now
+                      </ModalHeader>
+                      <ModalBody>
+                        <FormGroup>
+                          <Label>Title</Label>
+                          <InputGroup className="input-group-alternative mb-3">
+                            <Input
+                              name="title"
+                              placeholder="Enter title"
+                              type="text"
+                              onChange={(e) => setTitle(e.target.value)}
+                              required
+                            />
+                          </InputGroup>
+                        </FormGroup>
+                        <FormGroup>
+                          <Label>Description</Label>
+                          <InputGroup className="input-group-alternative mb-3">
+                            <Input
+                              name="description"
+                              placeholder="Enter description"
+                              type="textarea"
+                              onChange={(e) => setDiscription(e.target.value)}
+                              required
+                            />
+                          </InputGroup>
+                        </FormGroup>
+                      </ModalBody>
+                      <ModalFooter className="text-center justify-content-center">
+                        <Button type="submit" color="primary">
+                          Submit
+                        </Button>
+                        <Button
+                          color="warning"
+                          className="me-4"
+                          onClick={toggle}
+                        >
+                          Cancel
+                        </Button>
+                      </ModalFooter>
+                    </Form>
+                  </Modal>
+                  <ToastContainer />
+                </CardBody>
+              </Card>
             </Col>
           </Row>
         </Container>

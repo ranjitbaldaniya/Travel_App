@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import { Col, Row, Container } from "reactstrap";
 import AuthNavbar from "../components/navbar/AuthNavbar";
+import Footer from "../views/home/Footer";
 const UserLayout = () => {
   return (
     <>
@@ -14,6 +15,7 @@ const UserLayout = () => {
           </Col>
           <Col lg={12} md={12}> */}
       <Outlet />
+      <Footer />
       {/* </Col>
         </Row>
       </Container> */}

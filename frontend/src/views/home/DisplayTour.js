@@ -49,26 +49,18 @@ const DisplayTour = () => {
     navigate(`/user/tour/${id}`);
   };
 
+  //handleBook
+  const handleBook = (id) => {
+    navigate(`/user/book/${id}`);
+  };
+
   return (
     <Section id="recommend">
       <div className="title">
         <h2>Recommended Destinations</h2>
         <hr />
       </div>
-      {/* <div className="packages">
-        <ul>
-          {packages.map((pkg, index) => {
-            return (
-              <li
-                className={active === index + 1 ? "active" : ""}
-                onClick={() => setActive(index + 1)}
-              >
-                {pkg}
-              </li>
-            );
-          })}
-        </ul>
-      </div> */}
+
       {!loading ? (
         <>
           <Container>
@@ -109,17 +101,24 @@ const DisplayTour = () => {
                     <span>Days {data.PackageDays}</span>
                   </div>
                   <div className="text-center">
-                    From {moment(data.StartDate).utc().format("DD-MM-YYYY")}{" "}
-                    To {moment(data.EndDate).utc().format("DD-MM-YYYY")}
+                    From {moment(data.StartDate).utc().format("DD-MM-YYYY")} To{" "}
+                    {moment(data.EndDate).utc().format("DD-MM-YYYY")}
                   </div>
-                  <div className="w-100">
+                  <div className="d-flex justify-content-center">
                     {" "}
                     <Button
-                      className="btn btn-sm w-100"
+                      className="btn btn-sm me-3"
                       color="primary"
                       onClick={() => handleInquiry(data.id)}
                     >
                       Check Details
+                    </Button>
+                    <Button
+                      className="btn btn-sm"
+                      color="warning"
+                      onClick={() => handleBook(data.id)}
+                    >
+                      Book Now
                     </Button>
                   </div>
                 </div>

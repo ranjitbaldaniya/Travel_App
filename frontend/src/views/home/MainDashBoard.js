@@ -19,7 +19,7 @@ const MainDashBoard = () => {
               tenetur!
             </p>
           </div>
-          <div className="search">
+          {/* <div className="search">
             <div className="container">
               <label htmlFor="">Where you want to go</label>
               <input type="text" placeholder="Search Your location" />
@@ -33,7 +33,7 @@ const MainDashBoard = () => {
               <input type="date" />
             </div>
             <button>Explore Now</button>
-          </div>
+          </div> */}
         </div>
       </Section>
       <DisplayTour />

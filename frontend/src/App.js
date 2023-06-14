@@ -22,6 +22,7 @@ import Inquiry from "./components/inquiry/Inquiry";
 import AddInquiry from "./components/inquiry/AddInquiry";
 import EditInquiry from "./components/inquiry/EditInquiry";
 import MainDashBoard from "./views/home/MainDashBoard";
+import Booking from "./components/booking/Booking";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         </Route>
         <Route path="/user" element={<UserLayout />}>
           <Route index element={<MainDashBoard />} />
+          <Route path="/user/book/:id" element={<Booking/>} />
           <Route path="/user/tour/:id" element={<TourDetails />} />
           {/* <Route path="/user/tour/inquiry" element={<Inquiry/>} /> */}
         </Route>

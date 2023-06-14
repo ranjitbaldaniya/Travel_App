@@ -14,12 +14,12 @@ export default function Footer() {
         <li>
           <a href="#recommend">Tour Packages</a>
         </li>
-        <li>
+        {/* <li>
           <a href="#testimonials">Login</a>
         </li>
         <li>
           <a href="#testimonials">Register</a>
-        </li>
+        </li> */}
       </ul>
       <ul className="social__links">
         <li>
