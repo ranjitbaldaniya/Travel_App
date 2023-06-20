@@ -22,7 +22,7 @@ const Profile = () => {
     setUserData(data);
   }, []);
   return (
-    <Container style={{ backgroundColor: "#eee", height: "100%" }}>
+    <Container style={{ backgroundColor: "#eee" }}>
       <Row className="mt-5 py-5">
       <h3 className="text-center mb-3 text-primary">{userData.firstName} Profile</h3>
 

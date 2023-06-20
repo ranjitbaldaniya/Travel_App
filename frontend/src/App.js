@@ -23,6 +23,10 @@ import AddInquiry from "./components/inquiry/AddInquiry";
 import EditInquiry from "./components/inquiry/EditInquiry";
 import MainDashBoard from "./views/home/MainDashBoard";
 import Booking from "./components/booking/Booking";
+import ViewBookings from "./components/booking/ViewBookings";
+import EditBookings from "./components/booking/EditBookings";
+import AddBookings from "./components/booking/AddBookings";
+import UserBookings from "./components/booking/UserBookings";
 
 function App() {
   return (
@@ -46,10 +50,15 @@ function App() {
           <Route path="/admin/inquiries" element={<Inquiry />} />
           <Route path="/admin/addinquiries" element={<AddInquiry />} />
           <Route path="/admin/editinquiries/:id" element={<EditInquiry />} />
+          <Route path="/admin/viewbookings" element={<ViewBookings />} />
+          <Route path="/admin/addbookings" element={<AddBookings />} />
+          <Route path="/admin/editbookings/:id" element={<EditBookings />} />
         </Route>
         <Route path="/user" element={<UserLayout />}>
           <Route index element={<MainDashBoard />} />
-          <Route path="/user/book/:id" element={<Booking/>} />
+          <Route path="/user/booking" element={<UserBookings />} />
+
+          <Route path="/user/book/:id" element={<Booking />} />
           <Route path="/user/tour/:id" element={<TourDetails />} />
           {/* <Route path="/user/tour/inquiry" element={<Inquiry/>} /> */}
         </Route>

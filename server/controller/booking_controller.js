@@ -18,6 +18,7 @@ const createBooking = async (req, res) => {
     } else {
       const { details } = error;
       const message = details.map((i) => i.message).join(",");
+      // console.log("error", details);
       res.status(422).json({ error: message });
     }
   } catch (error) {
@@ -69,6 +70,8 @@ const getAllBooking = async (req, res) => {
     const data = await Booking.findAll();
     res.status(200).json(data);
   } catch (error) {
+          console.log("error", error);
+
     res.status(404).send(error);
   }
 };
@@ -88,20 +91,20 @@ const deleteSingleBooking = async (req, res) => {
 //getBookingWithUserAndTour
 const getBookingWithUserAndTour = async (req, res) => {
   const userId = req.params.id;
-  // console.log("id", userId);
+  console.log("id", userId);
   try {
     const getBookingUser = await Booking.findAll({
-      include: [
-        {
-          model: User,
-          attributes: ["email", "firstName", "mobileNo"],
-        },
-        {
-          model: Tour,
-          attributes: ["Name", "discription", "id"],
-        },
-      ],
-      where: { id: userId },
+      // include: [
+      //   {
+      //     model: User,
+      //     attributes: ["email", "firstName", "mobileNo"],
+      //   },
+      //   {
+      //     model: Tour,
+      //     attributes: ["Name", "discription", "id"],
+      //   },
+      // ],
+      where: { userId: userId },
     });
     res.status(200).json({ getBookingUser });
   } catch (error) {

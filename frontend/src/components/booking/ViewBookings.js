@@ -13,30 +13,30 @@ import {
   ModalBody,
   Input,
 } from "reactstrap";
-import moment from "moment";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { TostSucess } from "../../components/commonFunctions/Tost.js";
 import Pagination from "../../components/commonFunctions/Pagination.js";
 import Loader from "../../components/commonFunctions/Loader.js";
-import ApiHeader from "../../components/commonFunctions/ApiHeader.js";
 
-const AdminDashboard = () => {
-  const [tourData, setTourData] = useState([]);
+const ViewBookings = () => {
+  const [bookingData, setBookingData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [token, setToken] = useState("");
+  console.log("token", token);
   //Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [tourPerPage] = useState(4);
+  const [bookingPerPage] = useState(5);
 
   //get current tour
-  const indexOfLastTour = currentPage * tourPerPage;
-  const indexOfFirstTour = indexOfLastTour - tourPerPage;
-  const currentTour =
+  const indexOfLastTour = currentPage * bookingPerPage;
+  const indexOfFirstTour = indexOfLastTour - bookingPerPage;
+  const currentPageBooking =
     search.length == 0
-      ? tourData.slice(indexOfFirstTour, indexOfLastTour)
+      ? bookingData.slice(indexOfFirstTour, indexOfLastTour)
       : filteredData.slice(indexOfFirstTour, indexOfLastTour);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -50,33 +50,56 @@ const AdminDashboard = () => {
   const toggle = () => setModal(!modal);
 
   //useEffect for fetching Tour data
+
   useEffect(() => {
-    setLoading(false);
-    handleGetTour();
+    const gettoken = getToken();
+    console.log("datttaaa", gettoken);
+    setToken(gettoken);
   }, []);
 
-  //handleGetTour function
-  const handleGetTour = async () => {
-    let header = ApiHeader
-    let url = "http://localhost:3001/tour/viewalltour";
+  useEffect(() => {
+    setLoading(false);
+    handleGetBookings();
+  }, [token]);
+
+  //handleGetBookings function
+  const handleGetBookings = async () => {
+    let url = "http://localhost:3001/booking/list";
+    let header = { headers: { Authorization: `Bearer ${token}` } };
+    console.log("header", header);
     try {
-      const response = await axios.get(url , header);
-      // console.log("res", response.data);
-      setTourData(response.data);
-      setLoading(true);
+      if (token !== "") {
+        console.log("if calling");
+        const response = await axios.get(url, header);
+        console.log("res", response.data);
+        setBookingData(response.data);
+        setLoading(true);
+      } else {
+        console.log("else calling");
+
+        setLoading(false);
+      }
     } catch (error) {
       console.log("error in catch", error);
     }
   };
 
-  // handleEdit
-  const handleEdit = (id) => {
-    console.log("id", id);
-    navigate(`/admin/edittour/${id}`);
+  //Get Token
+  const getToken = () => {
+    const data1 = sessionStorage.getItem("access_token");
+    // console.log("userData", JSON.parse(data));
+    console.log("data1", data1);
+    return data1;
   };
 
-  //handleDelete
-  const handleDelete = (id) => {
+  // handleEditBooking
+  const handleEditBooking = (id) => {
+    console.log("id", id);
+    navigate(`/admin/editbookings/${id}`);
+  };
+
+  //handleDeleteBooking
+  const handleDeleteBooking = (id) => {
     console.log("deleteID", id);
     setDelId(id);
     toggle();
@@ -86,13 +109,15 @@ const AdminDashboard = () => {
   const onDelete = async () => {
     console.log("deleteID123", delId);
     let Id = delId;
-    let url = `http://localhost:3001/tour/deleteTour/${Id}`;
+    let header = { headers: { Authorization: `Bearer ${token}` } };
+
+    let url = `http://localhost:3001/booking/delete/${Id}`;
     try {
-      const response = await axios.get(url);
-      // console.log("delete res", response);
+      const response = await axios.get(url, header);
+      console.log("delete res", response);
       toggle();
-      handleGetTour();
-      TostSucess("Tour is deleted successfully!");
+      handleGetBookings();
+      TostSucess("Booking is deleted successfully!");
     } catch (error) {
       console.log("error in catch", error);
     }
@@ -101,28 +126,26 @@ const AdminDashboard = () => {
   const handleSearch = (e) => {
     setSearch(e.target.value);
     if (search !== "") {
-      const filterData = tourData.filter((item) => {
-        const Name = Object.values(item.Name)
+      const filterData = bookingData.filter((item) => {
+        const booikgPlace = Object.values(item.booikgPlace)
           .join("")
           .toLowerCase()
           .includes(search.toLowerCase());
 
-        const Discription = Object.values(item.Discription)
+        const peopleQunatity = Object.values(item.peopleQunatity)
           .join("")
           .toLowerCase()
           .includes(search.toLowerCase());
 
-        return Name || Discription;
+        return booikgPlace || peopleQunatity;
       });
       console.log("filtered data", filterData);
       setFilteredData(filterData);
     } else {
-      setFilteredData(tourData);
+      setFilteredData(bookingData);
     }
   };
 
-  // const StartDate = moment(tourData.StartDate).utc().format('DD-MM-YYYY')
-  // console.log(StartDate)
   return (
     <>
       {!loading ? (
@@ -134,13 +157,13 @@ const AdminDashboard = () => {
           <Row>
             <Col md={12} lg={12}>
               <div className="d-flex justify-content-between mb-3 mt-3">
-                <h3 className=" text-primary">All Available Tours</h3>
+                <h3 className=" text-primary">All Available Bookings</h3>
                 <Button
                   color="primary"
                   className="btn me-5"
-                  onClick={() => navigate("/admin/addtour")}
+                  onClick={() => navigate("/admin/addbookings")}
                 >
-                  AddTour
+                  Add Booking
                 </Button>
               </div>
             </Col>
@@ -163,54 +186,40 @@ const AdminDashboard = () => {
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>Discription</th>
-                    <th>Pack-Days</th>
-                    <th>Price</th>
-                    <th>Image</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
+                    <th>Booking Place</th>
+                    <th>Peoples In Tour</th>
+                    <th>Payment Status</th>
+                    <th>UserId</th>
+                    <th>TourId</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {currentTour.map((data, i) => (
+                  {currentPageBooking.map((data, i) => (
                     <>
                       <tr key={i}>
                         <th scope="row">{data.id}</th>
-                        <td>{data.Name}</td>
-                        <td style={{ width: "300px" }}>{data.Discription}</td>
-                        <td>{data.PackageDays}</td>
-                        <td>{data.Price}</td>
-                        <td>
-                          {/* {console.warn("data", data)} */}
-                          {/* src="../../publicC:\fakepath\Taj-Mahal.jpg" */}
-                          <img
-                            src={`http://localhost:3001/` + data.Image}
-                            className=""
-                            height={100}
-                            width={150}
-                            alt="tour image"
-                          />
+                        <td>{data.booikgPlace}</td>
+                        <td style={{ width: "300px" }}>
+                          {data.peopleQunatity}
                         </td>
-                        <td>
-                          {moment(data.StartDate).utc().format("DD-MM-YYYY")}
-                        </td>
-                        <td>
-                          {moment(data.EndDate).utc().format("DD-MM-YYYY")}
-                        </td>
+                        <td>{data.paid == true ? "True" : "False"}</td>
+                        <td>{data.userId}</td>
+
+                        <td>{data.tourId}</td>
+
                         <td>
                           <div className="d-flex justify-content-around">
                             <FiEdit
                               className="text-success "
                               style={{ cursor: "pointer" }}
-                              onClick={() => handleEdit(data.id)}
+                              onClick={() => handleEditBooking(data.id)}
                             />
 
                             <MdDelete
                               className="text-danger"
                               style={{ cursor: "pointer" }}
-                              onClick={() => handleDelete(data.id)}
+                              onClick={() => handleDeleteBooking(data.id)}
                               // onClick={}
                             />
                           </div>
@@ -240,8 +249,8 @@ const AdminDashboard = () => {
           <Row>
             <Col md={12} className="d-flex justify-content-center">
               <Pagination
-                postPerPage={tourPerPage}
-                totalPost={tourData.length}
+                postPerPage={bookingPerPage}
+                totalPost={bookingData.length}
                 paginate={paginate}
               />
             </Col>
@@ -252,4 +261,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default ViewBookings;

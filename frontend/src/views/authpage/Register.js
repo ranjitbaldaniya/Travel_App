@@ -21,7 +21,7 @@ import emailjs from "@emailjs/browser";
 
 const Register = () => {
   const [userData, setUserData] = useState({});
-  const [errorName, setErrorName] = useState("");
+  const [errorName, setErrorName] = useState(null);
   const [error, setError] = useState(null);
   // console.log("errorName", errorName);
 
@@ -58,9 +58,14 @@ const Register = () => {
       alert("User Registered Successfully!!");
       navigate("/login");
     } catch (error) {
-      console.log("error in catch", error);
-      setErrorName(error.response.data.error.split(" ")[0]);
-      setError(error.response.data.error);
+      console.log("error in catch", error.response.data.error);
+      if (error.response.data.error) {
+        console.log("if calling");
+        setError(error.response.data.error);
+      } else {
+        setErrorName(error.response.data.error.split(" ")[0]);
+        setError(error.response.data.error);
+      }
     }
   };
 
@@ -89,7 +94,7 @@ const Register = () => {
     form.appendChild(inputSubject);
 
     document.body.appendChild(form);
-console.log("formData" , form)
+    console.log("formData", form);
     emailjs
       .sendForm(
         "service_oawdr9j", // service_id
@@ -148,7 +153,7 @@ console.log("formData" , form)
                         // required
                       />
                     </InputGroup>
-                    {/* {console.log("error" , errorName == '"firstName"')} */}
+                    {console.log("error", errorName)}
                     {errorName === '"firstName"' ? (
                       <span>{errorDiv}</span>
                     ) : (
@@ -328,7 +333,7 @@ console.log("formData" , form)
                     </Col>
                   </Row>
                   <div className="text-center">
-                    {/* {errorDiv} */}
+                    {errorDiv}
                     <Button className="mt-1" type="submit" color="primary">
                       Create account
                     </Button>

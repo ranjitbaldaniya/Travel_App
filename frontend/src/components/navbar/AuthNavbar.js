@@ -23,7 +23,7 @@ const AuthNavbar = () => {
   //handle for getting credencials
   const handleGetAdminDetails = () => {
     const userDetails = sessionStorage.getItem("user");
-    // console.log("123", JSON.parse(userDetails));  
+    // console.log("123", JSON.parse(userDetails));
     return JSON.parse(userDetails);
   };
 
@@ -65,13 +65,19 @@ const AuthNavbar = () => {
                 </NavItem>
                 <NavItem>
                   <NavLink>
+ 
+                  <Button color="primary" onClick={e => navigate("/user/booking")}>Check Your Bookings</Button>
+
+                  </NavLink>{" "}
+                </NavItem>
+                <NavItem>
+                  <NavLink>
                     <Button color="primary" onClick={handleLogout}>
                       {" "}
                       Logout
                     </Button>
                   </NavLink>
                 </NavItem>
-                <NavItem></NavItem>
               </Nav>
             </>
           ) : (

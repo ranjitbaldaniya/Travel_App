@@ -58,6 +58,7 @@ const UserListing = () => {
     let url = `http://localhost:3001/admin/user/list?search`;
 
     let header = ApiHeader;
+    console.log("header"  , header)
     try {
       const response = await axios.get(url, header);
       console.log("res", response.data);

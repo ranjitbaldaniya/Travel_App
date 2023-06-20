@@ -17,18 +17,23 @@ const SidebarAdmin = () => {
                   All Tours
                 </li>
               </Link>
-             
               <Link to="/admin/users" className="text-dark">
                 <li className="sidebarListItem">
                   {/* <Timeline className="sidebarIcon" /> */}
                   Users
                 </li>
-                <Link to="/admin/inquiries" className="text-dark">
+              </Link>
+              <Link to="/admin/inquiries" className="text-dark">
                 <li className="sidebarListItem">
                   {/* <Timeline className="sidebarIcon" /> */}
                   Inquiries
                 </li>
               </Link>
+              <Link to="/admin/viewbookings" className="text-dark">
+                <li className="sidebarListItem">
+                  {/* <Timeline className="sidebarIcon" /> */}
+                  Bookings
+                </li>
               </Link>
               <Link to="/admin/profile" className="text-dark">
                 <li className="sidebarListItem">

@@ -1,7 +1,7 @@
 var db = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Op } = require('sequelize');
+const { Op } = require("sequelize");
 
 const {
   UserValidation,
@@ -18,6 +18,8 @@ const register = async (req, res) => {
   const result = UserValidation(data);
   const { value, error } = result;
   console.log("value", value);
+  console.log("error", result);
+
   const valid = error == null;
 
   try {
@@ -40,14 +42,30 @@ const register = async (req, res) => {
       res.status(200).json({ message: "User Created!", createUser });
     } else {
       const { details } = error;
-
+      console.log("error", error);
       const message = details.map((i) => i.message).join(",");
       // console.log("error", message);
       res.status(422).json({ error: message });
     }
+  // } catch (error) {
+  //   // console.warn("error in catch" , error);
+  //   const message = error.errors
+  //   console.warn("error in message" , message);
+  //   message.forEach((errorItem) => {
+  //     const errorMessage = errorItem.message;
+  //     console.warn("errorMessage " + errorMessage);
+  //   });
+    
+  //   console.warn("error in message123" , message);
+
+  //   res.status(400).json({error : message});
+  // }
   } catch (error) {
-    // console.log(error);
-    res.status(400).json(error.errors);
+    // console.warn("error in catch", error);
+    const messages = error.errors.map(errorItem => errorItem.message);
+    console.warn("error messages:", messages);
+    
+    res.status(400).json({ error: messages });
   }
 };
 
@@ -188,7 +206,7 @@ const updateProfile = async (req, res) => {
 //Add  user api
 const addUser = async (req, res) => {
   const data = req.body;
-  console.log(data);
+  // console.log(data);
   const result = AddUserValidation(data);
   const { value, error } = result;
   const valid = error == null;
@@ -214,7 +232,7 @@ const addUser = async (req, res) => {
       res.status(200).json({ message: "User created", userCreated });
     } else {
       const { details } = error;
-
+      console.log("error", error);
       const message = details.map((i) => i.message).join(",");
       res.status(400).json({ error: message });
     }
