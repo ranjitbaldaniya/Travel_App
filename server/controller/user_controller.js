@@ -17,8 +17,8 @@ const register = async (req, res) => {
   const data = req.body;
   const result = UserValidation(data);
   const { value, error } = result;
-  console.log("value", value);
-  console.log("error", result);
+  // console.log("value", value);
+  // console.log("error", result);
 
   const valid = error == null;
 

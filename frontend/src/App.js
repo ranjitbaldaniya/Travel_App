@@ -27,8 +27,11 @@ import ViewBookings from "./components/booking/ViewBookings";
 import EditBookings from "./components/booking/EditBookings";
 import AddBookings from "./components/booking/AddBookings";
 import UserBookings from "./components/booking/UserBookings";
+import Payment from "./components/paymentPage/Payment";
+// import dotenv from 'dotenv';
 
 function App() {
+  // dotenv.config();
   return (
     <BrowserRouter>
       <Routes>
@@ -60,6 +63,11 @@ function App() {
 
           <Route path="/user/book/:id" element={<Booking />} />
           <Route path="/user/tour/:id" element={<TourDetails />} />
+          <Route path="/user/payment/:id" element={<Payment />} />
+
+          <Route path="/user/success" element={<>Success</>} />
+          <Route path="/user/error" element={<>Error</>} />
+
           {/* <Route path="/user/tour/inquiry" element={<Inquiry/>} /> */}
         </Route>
         <Route path="*" element={<>Page Not-Found - 404</>} />

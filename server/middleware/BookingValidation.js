@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const BookingValidation = (data) => {
   const bookingSchema = Joi.object().keys({
-    paid: Joi.boolean().required(),
+    // paid: Joi.boolean(),
     booikgPlace: Joi.string().required(),
     peopleQunatity: Joi.string().required(),
     userId: Joi.number().required(),

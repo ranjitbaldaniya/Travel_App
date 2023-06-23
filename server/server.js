@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 require("./models");
+require('dotenv').config()
 const cors = require("cors");
 
 const app = express();
@@ -26,6 +27,10 @@ app.use("/inquiry", inquiryRouter);
 //booking Router
 const bookingRouter = require("./routes/bookingRoutes");
 app.use("/booking", bookingRouter);
+
+//payment Router
+const paymentRouter = require("./routes/paymetRoutes");
+app.use("/payment", paymentRouter);
 
 //Static Images Folder
 app.use("/Images", express.static("./Images"));

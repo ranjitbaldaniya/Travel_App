@@ -90,21 +90,21 @@ const deleteSingleBooking = async (req, res) => {
 
 //getBookingWithUserAndTour
 const getBookingWithUserAndTour = async (req, res) => {
-  const userId = req.params.id;
-  console.log("id", userId);
+  const id = req.params.id;
+  console.log("id", id);
   try {
     const getBookingUser = await Booking.findAll({
-      // include: [
-      //   {
-      //     model: User,
-      //     attributes: ["email", "firstName", "mobileNo"],
-      //   },
-      //   {
-      //     model: Tour,
-      //     attributes: ["Name", "discription", "id"],
-      //   },
-      // ],
-      where: { userId: userId },
+      include: [
+        {
+          model: User,
+          attributes: ["email", "firstName", "mobileNo"],
+        },
+        {
+          model: Tour,
+          attributes: ["Name", "discription", "id"],
+        },
+      ],
+      where: { id: id },
     });
     res.status(200).json({ getBookingUser });
   } catch (error) {

@@ -6,7 +6,7 @@ bookingRouter.post("/addbooking", validateToken,booking_controller.createBooking
 
 bookingRouter.post("/update/:id",validateToken, booking_controller.updateBooking);
 
-bookingRouter.get("/edit/:id",validateToken, booking_controller.getSingleBooking);
+bookingRouter.get("/edit/:id", booking_controller.getSingleBooking);
 
 bookingRouter.get("/list", validateToken, booking_controller.getAllBooking);
 
