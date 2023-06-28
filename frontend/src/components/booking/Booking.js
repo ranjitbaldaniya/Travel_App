@@ -70,7 +70,7 @@ const Booking = () => {
   };
   const sectionStyle = {
     width: "100%",
-    height: "200px",
+    height: "300px",
     backgroundImage: "url(" + `http://localhost:3001/${tourData.Image} ` + ")",
     backgroundPosition: "center",
     backgroundSize: "cover",
@@ -113,7 +113,7 @@ const Booking = () => {
 
   return (
     <>
-      <Container>
+      <Container className="mt-5 mb-5">
         {!loading ? (
           <>
             <Loader />
@@ -122,9 +122,9 @@ const Booking = () => {
           <Card>
             <Row>
               {/* <Col lg={3}></Col> */}
-              <Col lg={4}>
+              <Col lg={5}>
                 {/* <Card> */}
-                {/* <CardBody> */}
+                <CardBody>
                 <section
                   style={sectionStyle}
                   className="tour-section"
@@ -158,10 +158,12 @@ const Booking = () => {
                       </span>
                     </h5>
                   </div> */}
-                {/* </CardBody> */}
+                </CardBody>
                 {/* </Card> */}
               </Col>
               <Col lg={6}>
+              <CardBody>
+
                 {/* <Card> */}
                 {/* <CardTitle> */}
                 <h4 className="text-center text-danger mt-2">
@@ -190,14 +192,38 @@ const Booking = () => {
                       onChange={(e) => setPeopleQunatity(e.target.value)}
                     />
                   </FormGroup>
+                  <hr className="custom-hr" />
+
                   <div className="mb-3">
+                    {peopleQunatity == "" ? (
+                      <h5>
+                        Amount to be paid :{" "}
+                        <span className="text-danger">{tourData.Price}</span>
+                      </h5>
+                    ) : (
+                      <>
+                        <h5>
+                          Amount to be paid :{" "}
+                          <span className="text-danger">
+                            {tourData.Price} X {peopleQunatity}
+                          </span>
+                        </h5>
+                      </>
+                    )}
+                    <hr className="custom-hr" />
+
                     <h5>
-                      Total amount to be paid :{" "}
-                      <span className="text-danger">
-                        {tourData.Price * peopleQunatity}
-                      </span>
+                      Total amount to be paid :
+                      {peopleQunatity == "" ? (
+                        <span className="text-danger">{tourData.Price} /-</span>
+                      ) : (
+                        <span className="text-danger">
+                          {tourData.Price * peopleQunatity} /-
+                        </span>
+                      )}
                     </h5>
                   </div>
+                  <hr className="custom-hr" />
 
                   <div className="d-flex justify-content-center">
                     {userData ? (
@@ -205,7 +231,7 @@ const Booking = () => {
                         <Button
                           color="warning"
                           className="me-3"
-                          // type="button"
+                          type="button"
                           // onClick={checkOut}
                           // onClick={handlePayhere}
                         >
@@ -231,7 +257,7 @@ const Booking = () => {
                     )}
                   </div>
                 </form>
-                {/* </CardBody> */}
+                </CardBody>
                 {/* </Card> */}
               </Col>
             </Row>

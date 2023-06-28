@@ -26,7 +26,8 @@ const UserBookings = () => {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState("");
   console.log("currentUser", currentUser);
-
+  const [listUsers, setListUsers] = useState([]);
+  const [tourList, setTourList] = useState([]);
   //Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [bookingPerPage] = useState(5);
@@ -48,8 +49,10 @@ const UserBookings = () => {
   useEffect(() => {
     setLoading(false);
     const data = getCurrentUser();
-    setCurrentUser(data );
+    setCurrentUser(data);
     handleGetBookings();
+    getUserListing();
+    getTourListing();
   }, []);
 
   //Get Current User Details
@@ -60,11 +63,42 @@ const UserBookings = () => {
     return JSON.parse(data);
   };
 
+  //getUserListing
+  const getUserListing = async () => {
+    let url = "http://localhost:3001/admin/user/list";
+    let header = ApiHeader;
+    try {
+      const response = await axios.get(url, header);
+      console.log("res of userlisting", response.data);
+      setListUsers(response.data);
+    } catch (error) {
+      console.log("error in catch", error);
+    }
+  };
+
+  //getTourListing
+  const getTourListing = async () => {
+    let url = "http://localhost:3001/tour/viewalltour";
+    let header = ApiHeader;
+    try {
+      const response = await axios.get(url, header);
+      console.log("res of tourlist", response.data);
+      setTourList(response.data);
+
+      // let filteredTour = response.data.filter((e) => userId == e.id);
+      // console.log("filteredTour", filteredTour[0]);
+
+      // setTourName(filteredTour[0].Name);
+    } catch (error) {
+      console.log("error in catch", error);
+    }
+  };
+
   //handleGetBookings
   const handleGetBookings = async () => {
     let id = 2;
     console.log("1d", id);
-    let url = `http://localhost:3001/booking/getBookingWithUser/${id}`;
+    let url = `http://localhost:3001/booking/getBookingWithUserId/${id}`;
     try {
       const response = await axios.get(url, id);
       console.log("res", response.data.getBookingUser);
@@ -74,6 +108,9 @@ const UserBookings = () => {
       console.log("error in catch", error);
     }
   };
+  let tname = tourList.filter((item) => item.id == 2).map((one) => one.Name);
+
+  console.log("tname", tname);
   return (
     <>
       {!loading ? (
@@ -98,9 +135,9 @@ const UserBookings = () => {
                     <th>#</th>
                     <th>Booking Place</th>
                     <th>Peoples In Tour</th>
-                    <th>Payment Status</th>
-                    <th>UserId</th>
-                    <th>TourId</th>
+                    {/* <th>Payment Status</th> */}
+                    <th>User name</th>
+                    <th>Tour name</th>
                     {/* <th>Actions</th> */}
                   </tr>
                 </thead>
@@ -111,10 +148,18 @@ const UserBookings = () => {
                         <th scope="row">{data.id}</th>
                         <td>{data.booikgPlace}</td>
                         <td>{data.peopleQunatity}</td>
-                        <td>{data.paid}</td>
-                        <td>{data.userId}</td>
+                        {/* <td>{data.paid}</td> */}
+                        <td>
+                          {listUsers
+                            .filter((item) => item.id == data.userId)
+                            .map((one) => one.firstName)}
+                        </td>
 
-                        <td>{data.tourId}</td>
+                        <td>
+                          {tourList
+                            .filter((item) => item.id == data.tourId)
+                            .map((one) => one.Name)}
+                        </td>
 
                         {/* <td>
                           <div className="d-flex justify-content-around">

@@ -55,7 +55,7 @@ const DisplayTour = () => {
   };
 
   return (
-    <Section id="recommend">
+    <Section id="recommend" className="mb-5">
       <div className="title">
         <h2>Recommended Destinations</h2>
         <hr />

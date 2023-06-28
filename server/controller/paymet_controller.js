@@ -5,7 +5,7 @@ const payment = async (req, res) => {
   try {
     const { amount, currency, paymentMethodId, description } = req.body;
 
-    console.log("request.body", req.body);
+    console.log("request.body this one is calllllllliiiinnnngggggg", req.body);
     // console.log("requesttttt", process.env.STRIPE_SECRET_KEY);
     // Create a payment intent
     const paymentIntent = await stripe.checkout.sessions.create(
@@ -40,23 +40,16 @@ const payment = async (req, res) => {
   }
 };
 
-const calculateOrderAmount = (items) => {
-  // Replace this constant with a calculation of the order's amount
-  // Calculate the order total on the server to prevent
-  // people from directly manipulating the amount on the client
-  return 1400;
-};
-
 const pay = async (req, res) => {
-  const { amount } = req.body;
-console.log("123" , amount)
+  const { amount, bookingId } = req.body;
+  console.log("123", req.body);
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
-    amount : amount,
+    amount: amount,
     payment_method_types: ["card"],
     currency: "inr",
-   
-  }); 
+    description: bookingId,
+  });
 
   res.send({
     clientSecret: paymentIntent.client_secret,

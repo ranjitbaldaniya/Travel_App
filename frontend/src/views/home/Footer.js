@@ -4,13 +4,15 @@ import { BsLinkedin, BsFacebook } from "react-icons/bs";
 import { AiFillInstagram } from "react-icons/ai";
 export default function Footer() {
   return (
-    <FooterContainer>
+    <FooterContainer
+      style={{ position: "fixed", left: "0", bottom: "0", width: "100%" }}
+    >
       <span>Copyright &copy; 2021 Travelo. All rights reserved</span>
       <ul className="links">
         <li>
           <a href="#hero">Home</a>
         </li>
-        
+
         <li>
           <a href="#recommend">Tour Packages</a>
         </li>
@@ -41,7 +43,7 @@ const FooterContainer = styled.footer`
   justify-content: space-evenly;
   background-color: #d0d8ff;
   border-radius: 0.5rem;
-  padding: 2.5rem;
+  padding: 1.5rem;
 
   ul {
     display: flex;

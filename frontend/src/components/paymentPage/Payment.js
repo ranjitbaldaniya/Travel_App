@@ -5,53 +5,56 @@ import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "./CheckOutForm";
 import "./stripe.css";
 import { useParams } from "react-router-dom";
+import { Container } from "reactstrap";
 
 const Payment = () => {
   const [clientSecret, setClientSecret] = useState("");
-  console.log("secret", clientSecret);
+  const [amount, setAmount] = useState("");
+  const [peopleQunatity, setPeopleQunatity] = useState("");
+  const [email, setEmail] = useState("");
+  const [userData, setUserData] = useState("");
+  console.log("userData", userData);
   const bookingId = useParams();
-console.log(bookingId)
-   //handleGetBooking
-   const handleGetBooking = async () => {
+
+  const totalAmount = amount * peopleQunatity;
+  // console.log("totalAmount", totalAmount);
+  useEffect(() => {
+    handleGetBooking();
+  }, []);
+
+  useEffect(() => {
+    // Create PaymentIntent as soon as the page loads
+    if (amount !== "") {
+      createPayment();
+    }
+  }, [amount]);
+
+  //handleGetBooking
+  const handleGetBooking = async () => {
     let url = `http://localhost:3001/booking/getBookingWithUser/${bookingId.id}`;
     try {
       const response = await axios.get(url, bookingId);
       console.log("res", response.data);
-     
+      setAmount(response.data.getBookingUser[0].Tour.Price);
+      setPeopleQunatity(response.data.getBookingUser[0].peopleQunatity);
+      setUserData(response.data.getBookingUser[0]);
     } catch (error) {
       console.log("error in catch", error);
     }
   };
 
-  useEffect(() => {
-    handleGetBooking()
-  }, [])
-  
-
-
-  
-  useEffect(() => {
-    // // Create PaymentIntent as soon as the page loads
+  const createPayment = () => {
     fetch("http://localhost:3001/payment/pay", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: 5000 }),
+      body: JSON.stringify({
+        amount: totalAmount * 100,
+        bookingId: bookingId.id,
+      }),
     })
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret));
-    // axios
-    //   .post("http://localhost:3001/payment/pay", {
-    //     items: [{ amount: "5000" }],
-    //   })
-    //   .then((response) => {
-    //     console.log("respomceee" , response)
-    //     const { clientSecret } = response.data;
-    //     setClientSecret(clientSecret);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error creating PaymentIntent:", error);
-    //   });
-  }, []);
+  };
 
   const appearance = {
     theme: "stripe",
@@ -66,13 +69,15 @@ console.log(bookingId)
   );
 
   return (
-    <div className="Stripe">
-      {clientSecret && (
-        <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm />
-        </Elements>
-      )}
-    </div>
+    <Container className="text-center d-flex justify-content-center mt-5 mb-5">
+      <div className="Stripe">
+        {clientSecret && (
+          <Elements options={options} stripe={stripePromise}>
+            <CheckoutForm bookingId={bookingId.id} />
+          </Elements>
+        )}
+      </div>
+    </Container>
   );
 };
 

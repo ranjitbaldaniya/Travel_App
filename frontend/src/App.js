@@ -28,6 +28,7 @@ import EditBookings from "./components/booking/EditBookings";
 import AddBookings from "./components/booking/AddBookings";
 import UserBookings from "./components/booking/UserBookings";
 import Payment from "./components/paymentPage/Payment";
+import SuccessPage from "./components/paymentPage/SuccessPage";
 // import dotenv from 'dotenv';
 
 function App() {
@@ -65,7 +66,7 @@ function App() {
           <Route path="/user/tour/:id" element={<TourDetails />} />
           <Route path="/user/payment/:id" element={<Payment />} />
 
-          <Route path="/user/success" element={<>Success</>} />
+          <Route path="/user/success/:id" element={<SuccessPage/>} />
           <Route path="/user/error" element={<>Error</>} />
 
           {/* <Route path="/user/tour/inquiry" element={<Inquiry/>} /> */}

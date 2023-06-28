@@ -13,5 +13,7 @@ bookingRouter.get("/list", validateToken, booking_controller.getAllBooking);
 bookingRouter.get("/delete/:id",validateToken, booking_controller.deleteSingleBooking);
 
 bookingRouter.get("/getBookingWithUser/:id", booking_controller.getBookingWithUserAndTour);
+bookingRouter.get("/getBookingWithUserId/:id", booking_controller.getBookingWithUserId);
+
 
 module.exports = bookingRouter;

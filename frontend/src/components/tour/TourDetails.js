@@ -134,7 +134,7 @@ const TourDetails = () => {
     const inputToName = document.createElement("input");
     inputToName.type = "text";
     inputToName.name = "to_name";
-    inputToName.value = "Ranjit";
+    inputToName.value = "Admin";
     form.appendChild(inputToName);
 
     const inputFromName = document.createElement("input");
@@ -197,12 +197,12 @@ const TourDetails = () => {
           <Loader />
         </>
       ) : (
-        <Container fluid>
+        <Container className="mb-5">
           <Row>
             <Col lg={3}></Col>
 
-            <Col lg={6}>
-              <Card>
+            <Col lg={7}>
+              <Card className="mb-5">
                 <CardBody>
                   <section
                     style={sectionStyle}
