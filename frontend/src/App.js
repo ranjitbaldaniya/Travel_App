@@ -61,14 +61,11 @@ function App() {
         <Route path="/user" element={<UserLayout />}>
           <Route index element={<MainDashBoard />} />
           <Route path="/user/booking" element={<UserBookings />} />
-
           <Route path="/user/book/:id" element={<Booking />} />
           <Route path="/user/tour/:id" element={<TourDetails />} />
           <Route path="/user/payment/:id" element={<Payment />} />
-
           <Route path="/user/success/:id" element={<SuccessPage/>} />
           <Route path="/user/error" element={<>Error</>} />
-
           {/* <Route path="/user/tour/inquiry" element={<Inquiry/>} /> */}
         </Route>
         <Route path="*" element={<>Page Not-Found - 404</>} />

@@ -26,7 +26,7 @@ const WrappedSuccessPage = () => {
     let url = `http://localhost:3001/booking/getBookingWithUser/${bookingId.id}`;
     try {
       const response = await axios.get(url, bookingId);
-      console.log("res", response.data);
+      // console.log("res", response.data);
       setBookingData(response.data);
     } catch (error) {
       console.log("error in catch", error);
@@ -42,7 +42,7 @@ const WrappedSuccessPage = () => {
     const clientSecret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
     );
-    console.log("clientSecret is called!!!", clientSecret);
+    // console.log("clientSecret is called!!!", clientSecret);
 
     if (!clientSecret) {
       return;
@@ -51,11 +51,10 @@ const WrappedSuccessPage = () => {
       return;
     }
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      console.log("123", paymentIntent);
+      // console.log("123", paymentIntent);
       switch (paymentIntent.status) {
         case "succeeded":
-          console.log("its called");
-
+          // console.log("its called");
           handleSendEmail();
           setMessage("Payment succeeded!");
           break;
