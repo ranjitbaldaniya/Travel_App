@@ -26,7 +26,7 @@ const ViewBookings = () => {
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [token, setToken] = useState("");
-  console.log("token", token);
+  // console.log("token", token);
   //Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [bookingPerPage] = useState(5);
@@ -53,7 +53,7 @@ const ViewBookings = () => {
 
   useEffect(() => {
     const gettoken = getToken();
-    console.log("datttaaa", gettoken);
+    // console.log("datttaaa", gettoken);
     setToken(gettoken);
   }, []);
 
@@ -66,18 +66,17 @@ const ViewBookings = () => {
   const handleGetBookings = async () => {
     let url = "http://localhost:3001/booking/list";
     let header = { headers: { Authorization: `Bearer ${token}` } };
-    console.log("header", header);
+    // console.log("header", header);
     try {
       if (token !== "") {
-        console.log("if calling");
+        // console.log("if calling");
         const response = await axios.get(url, header);
-        console.log("res", response.data);
+        // console.log("res", response.data);
         setBookingData(response.data);
         setLoading(true);
       } else {
-        console.log("else calling");
-
         setLoading(false);
+        console.log("else calling");
       }
     } catch (error) {
       console.log("error in catch", error);
@@ -88,7 +87,7 @@ const ViewBookings = () => {
   const getToken = () => {
     const data1 = sessionStorage.getItem("access_token");
     // console.log("userData", JSON.parse(data));
-    console.log("data1", data1);
+    // console.log("data1", data1);
     return data1;
   };
 

@@ -25,6 +25,7 @@ const UserListing = () => {
   const [listUsers, setListUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [token, setToken] = useState("");
 
   // Modal open state
   const [modal, setModal] = useState(false);
@@ -46,28 +47,42 @@ const UserListing = () => {
   const navigate = useNavigate();
 
   const toggle = () => setModal(!modal);
+ //useEffect for fetching user data
 
-  //useEffect for fetching Tour data
+ useEffect(() => {
+  const gettoken = getToken();
+  // console.log("datttaaa", gettoken);
+  setToken(gettoken);
+}, []);
+
   useEffect(() => {
     setLoading(false);
     handleListUser();
-  }, []);
+  }, [token]);
 
   //handleListUser function
   const handleListUser = async () => {
     let url = `http://localhost:3001/admin/user/list?search`;
 
-    let header = ApiHeader;
-    console.log("header"  , header)
+    let header = { headers: { Authorization: `Bearer ${token}` } };
+    // console.log("header"  , header)
     try {
       const response = await axios.get(url, header);
-      console.log("res", response.data);
+      // console.log("res", response.data);
       setListUsers(response.data);
       setLoading(true);
     } catch (error) {
+      setLoading(false);
       console.log("error in catch", error);
     }
   };
+    //Get Token
+    const getToken = () => {
+      const data1 = sessionStorage.getItem("access_token");
+      // console.log("userData", JSON.parse(data));
+      console.log("data1", data1);
+      return data1;
+    };
 
   //handleEdit user
   const handleEdit = (id) => {

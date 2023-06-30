@@ -27,7 +27,9 @@ const Inquiry = () => {
 
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  console.log("filterdata", filteredData);
+  const [token, setToken] = useState("");
+
+  // console.log("filterdata", filteredData);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [userPerPage] = useState(10);
@@ -47,7 +49,7 @@ const Inquiry = () => {
   const navigate = useNavigate();
   //handleGetInquiries
   const handleGetInquiries = async () => {
-    let header = ApiHeader;
+    let header = { headers: { Authorization: `Bearer ${token}` } };
     let url = "http://localhost:3001/inquiry/list";
     try {
       const response = await axios.get(url, header);
@@ -58,11 +60,28 @@ const Inquiry = () => {
       console.log("error", error);
     }
   };
+
+  useEffect(() => {
+    const gettoken = getToken();
+    // console.log("datttaaa", gettoken);
+    setToken(gettoken);
+  }, []);
+
+
   //useeffect for fetching all inquiries
   useEffect(() => {
     setLoading(false);
     handleGetInquiries();
-  }, []);
+  }, [token]);
+
+
+    //Get Token
+    const getToken = () => {
+      const data1 = sessionStorage.getItem("access_token");
+      // console.log("userData", JSON.parse(data));
+      // console.log("data1", data1);
+      return data1;
+    };
 
   //handleEdit
   const handleEdit = (id) => {
@@ -81,7 +100,7 @@ const Inquiry = () => {
   const onDelete = async () => {
     console.log("deleteID123", delId);
     let Id = delId;
-    let header = ApiHeader;
+    let header = { headers: { Authorization: `Bearer ${token}` } };
     let url = `http://localhost:3001/inquiry/delete/${Id}`;
     try {
       const response = await axios.get(url, header);
